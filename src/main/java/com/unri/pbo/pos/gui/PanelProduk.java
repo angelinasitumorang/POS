@@ -10,12 +10,12 @@ package com.unri.pbo.pos.gui;
  */
 public class PanelProduk extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLoggerPanelProduke.class.getName());
+        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelProduk.class.getName());
 
     /**
      * Creates new form FrameDashbaord
      */
-    publiPanelProdukme() {
+        public PanelProduk() {
         initComponents();
     }
 
@@ -515,7 +515,7 @@ public class PanelProduk extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> nPanelProdukame().setVisible(true));
+            java.awt.EventQueue.invokeLater(() -> new PanelProduk().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

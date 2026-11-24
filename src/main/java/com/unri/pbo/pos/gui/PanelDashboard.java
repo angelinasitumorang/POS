@@ -5,21 +5,56 @@
 package com.unri.pbo.pos.gui;
 
 import java.awt.event.ActionEvent;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author angel
  */
-public class PanelDashboard extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelDashboard.class.getName());
+  
 
-    /**
-     * Creates new form MainFrame
-     */
-    public PanelDashboard() {
-        initComponents();
-    }
+    public class PanelDashboard extends javax.swing.JFrame {
+
+        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelDashboard.class.getName());
+
+        /**
+         * Creates new form MainFrame
+         */
+        private DefaultTableModel model;
+        private final List<ProdukItem> daftarProduk = new ArrayList<>();
+        private final NumberFormat rp = NumberFormat.getInstance(new Locale("id", "ID"));
+        private int urutanPesanan = 1;
+        private int noDetail = 0;
+        private String idPesanan;
+
+        private static class ProdukItem {
+
+            String id, nama;
+            int harga, stok;
+
+            ProdukItem(String id, String nama, int harga, int stok) {
+                this.id = id;
+                this.nama = nama;
+                this.harga = harga;
+                this.stok = stok;
+            }
+        }
+
+        public PanelDashboard() {
+            initComponents();
+            siapkanTabel();
+            siapkanProduk();
+            siapkanForm();
+            pasangEvent();
+            pesananBaru();
+        }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,7 +109,6 @@ public class PanelDashboard extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 204, 204));
         setName("Dashboard"); // NOI18N
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1000, 700));
         setSize(new java.awt.Dimension(1280, 800));
 
         pnlSidebar.setBackground(new java.awt.Color(27, 77, 62));
@@ -392,6 +426,11 @@ public class PanelDashboard extends javax.swing.JFrame {
         cmbProduk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbProduk.setBorder(javax.swing.BorderFactory.createTitledBorder("Produk"));
         cmbProduk.setPreferredSize(new java.awt.Dimension(340, 26));
+        cmbProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProdukActionPerformed(evt);
+            }
+        });
 
         txtHarga.setEditable(false);
         txtHarga.setBackground(new java.awt.Color(236, 236, 236));
@@ -428,6 +467,11 @@ public class PanelDashboard extends javax.swing.JFrame {
         btnTambah.setText("+ Tambah");
         btnTambah.setMargin(new java.awt.Insets(4, 12, 4, 12));
         btnTambah.setPreferredSize(new java.awt.Dimension(95, 26));
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlProdukLayout = new javax.swing.GroupLayout(pnlProduk);
         pnlProduk.setLayout(pnlProdukLayout);
@@ -617,7 +661,7 @@ public class PanelDashboard extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlPelanggan, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE))
                 .addGap(26, 26, 26)
                 .addComponent(pnlDaftar, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -651,7 +695,7 @@ public class PanelDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPembelianActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
+        ubahJumlah();
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void txtIdPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPelangganActionPerformed
@@ -667,8 +711,218 @@ public class PanelDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_txtStokActionPerformed
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        // TODO add your handling code here:
+        ubahJumlah();
     }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void cmbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdukActionPerformed
+            // TODO add your handling code here:
+    }//GEN-LAST:event_cmbProdukActionPerformed
+    private void siapkanTabel() {
+        model = new DefaultTableModel(
+                new Object[]{"No", "ID Detail", "Produk", "Harga (Rp)", "Jumlah", "Subtotal (Rp)"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
+        tblPesanan.setModel(model);
+    }
+
+    private void siapkanProduk() {
+        daftarProduk.clear();
+        daftarProduk.add(new ProdukItem("BRG001", "Bolu Kemojo", 45000, 20));
+        daftarProduk.add(new ProdukItem("BRG002", "Lempuk Durian", 30000, 15));
+        daftarProduk.add(new ProdukItem("BRG003", "Keripik Nenas", 25000, 30));
+        cmbProduk.removeAllItems();
+        for (ProdukItem p : daftarProduk) {
+            cmbProduk.addItem(p.nama);
+        }
+    }
+
+    private void siapkanForm() {
+        cmbJenis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Umum", "Member"}));
+        spnJumlah.setModel(new SpinnerNumberModel(1, 1, 9999, 1));
+        txtHarga.setEditable(false);
+        txtStok.setEditable(false);
+        tampilkanDetailProduk();
+    }
+
+    private void pasangEvent() {
+        cmbProduk.addActionListener(e -> tampilkanDetailProduk());
+        btnTambah.addActionListener(e -> tambahItem());
+        jButton1.addActionListener(e -> hapusItem());
+        btnReset.addActionListener(e -> resetForm());
+        btnCetak.addActionListener(e -> cetakNota());
+        btnSimpan.addActionListener(e -> simpanPesanan());
+    }
+
+    private void pesananBaru() {
+        idPesanan = String.format("PJ%03d", urutanPesanan);
+        lblNoPesanan.setText("No. Pesanan: " + idPesanan);
+        noDetail = 0;
+    }
+
+    private void tampilkanDetailProduk() {
+        int i = cmbProduk.getSelectedIndex();
+        if (i < 0) {
+            return;
+        }
+        ProdukItem p = daftarProduk.get(i);
+        txtHarga.setText("Rp " + rp.format(p.harga));
+        txtStok.setText(String.valueOf(p.stok));
+    }
+
+    private int cariBaris(String namaProduk) {
+        for (int r = 0; r < model.getRowCount(); r++) {
+            if (model.getValueAt(r, 2).equals(namaProduk)) {
+                return r;
+            }
+        }
+        return -1;
+    }
+
+    private void tambahItem() {
+        int i = cmbProduk.getSelectedIndex();
+        if (i < 0) {
+            return;
+        }
+        ProdukItem p = daftarProduk.get(i);
+        int jumlah = (int) spnJumlah.getValue();
+        int baris = cariBaris(p.nama);
+        int sudah = (baris >= 0) ? (int) model.getValueAt(baris, 4) : 0;
+
+        if (sudah + jumlah > p.stok) {
+            JOptionPane.showMessageDialog(this, "Stok tidak cukup! Sisa stok: " + p.stok);
+            return;
+        }
+        if (baris >= 0) {
+            int qty = sudah + jumlah;
+            model.setValueAt(qty, baris, 4);
+            model.setValueAt(qty * p.harga, baris, 5);
+        } else {
+            noDetail++;
+            model.addRow(new Object[]{
+                model.getRowCount() + 1, idPesanan + "-D" + noDetail,
+                p.nama, p.harga, jumlah, p.harga * jumlah
+            });
+        }
+        spnJumlah.setValue(1);
+        hitungTotal();
+    }
+
+    private void ubahJumlah() {
+        int r = tblPesanan.getSelectedRow();
+        if (r < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih baris pesanan dulu!");
+            return;
+        }
+        String input = JOptionPane.showInputDialog(this, "Jumlah baru:", model.getValueAt(r, 4));
+        if (input == null) {
+            return;
+        }
+        try {
+            int qty = Integer.parseInt(input.trim());
+            if (qty < 1) {
+                throw new NumberFormatException();
+            }
+            int stok = stokProduk((String) model.getValueAt(r, 2));
+            if (qty > stok) {
+                JOptionPane.showMessageDialog(this, "Stok tidak cukup! Sisa stok: " + stok);
+                return;
+            }
+            int harga = (int) model.getValueAt(r, 3);
+            model.setValueAt(qty, r, 4);
+            model.setValueAt(qty * harga, r, 5);
+            hitungTotal();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Masukkan angka bulat lebih dari 0.");
+        }
+    }
+
+    private int stokProduk(String nama) {
+        for (ProdukItem p : daftarProduk) {
+            if (p.nama.equals(nama)) {
+                return p.stok;
+            }
+        }
+        return 0;
+    }
+
+    private void hapusItem() {
+        int r = tblPesanan.getSelectedRow();
+        if (r < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang mau dihapus!");
+            return;
+        }
+        model.removeRow(r);
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt(i + 1, i, 0);
+        }
+        hitungTotal();
+    }
+
+    private int hitungTotal() {
+        int total = 0;
+        for (int r = 0; r < model.getRowCount(); r++) {
+            total += (int) model.getValueAt(r, 5);
+        }
+        lblTotal.setText("Rp " + rp.format(total));
+        return total;
+    }
+
+    private void resetForm() {
+        model.setRowCount(0);
+        txtIdPelanggan.setText("");
+        txtNamaPelanggan.setText("");
+        txtTelepon.setText("");
+        txtAlamat.setText("");
+        txtCatatan.setText("");
+        cmbJenis.setSelectedIndex(0);
+        if (cmbProduk.getItemCount() > 0) {
+            cmbProduk.setSelectedIndex(0);
+        }
+        spnJumlah.setValue(1);
+        noDetail = 0;
+        hitungTotal();
+    }
+
+    private void cetakNota() {
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Belum ada pesanan.");
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== KhasKita ===\n").append(idPesanan).append("\n")
+                .append("Pelanggan: ").append(txtNamaPelanggan.getText()).append("\n\n");
+        for (int r = 0; r < model.getRowCount(); r++) {
+            sb.append(model.getValueAt(r, 2)).append("  ")
+                    .append(model.getValueAt(r, 4)).append(" x ")
+                    .append(rp.format(model.getValueAt(r, 3))).append(" = ")
+                    .append(rp.format(model.getValueAt(r, 5))).append("\n");
+        }
+        sb.append("\nTotal: ").append(lblTotal.getText());
+        JOptionPane.showMessageDialog(this, sb.toString(), "Nota", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void simpanPesanan() {
+        if (txtNamaPelanggan.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama pelanggan wajib diisi!");
+            return;
+        }
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Daftar pesanan masih kosong!");
+            return;
+        }
+        // TODO: simpan ke database lewat Koneksi.java
+        JOptionPane.showMessageDialog(this, "Pesanan " + idPesanan + " tersimpan.\nTotal: " + lblTotal.getText());
+        urutanPesanan++;
+        resetForm();
+        pesananBaru();
+    }
 
     /**
      * @param args the command line arguments

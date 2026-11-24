@@ -8,9 +8,6 @@
     </Property>
     <Property name="name" type="java.lang.String" value="Dashboard" noResource="true"/>
     <Property name="undecorated" type="boolean" value="true"/>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1000, 700]"/>
-    </Property>
     <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1280, 800]"/>
     </Property>
@@ -516,7 +513,7 @@
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="pnlPelanggan" pref="230" max="32767" attributes="0"/>
-                      <Component id="pnlProduk" pref="0" max="32767" attributes="0"/>
+                      <Component id="pnlProduk" pref="230" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="pnlDaftar" min="-2" pref="380" max="-2" attributes="0"/>
@@ -837,6 +834,9 @@
                   <Dimension value="[340, 26]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbProdukActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -943,6 +943,9 @@
                   <Dimension value="[95, 26]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTambahActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
