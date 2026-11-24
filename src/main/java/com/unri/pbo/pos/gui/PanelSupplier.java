@@ -288,7 +288,8 @@ public class PanelSupplier extends javax.swing.JFrame {
         lblJudul.setText("Data Supplier");
         lblJudul.setPreferredSize(new java.awt.Dimension(420, 32));
 
-        pnlForm.setBorder(javax.swing.BorderFactory.createTitledBorder(null, " Form Pelanggan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(27, 77, 62))); // NOI18N
+        pnlForm.setBackground(new java.awt.Color(255, 255, 255));
+        pnlForm.setBorder(javax.swing.BorderFactory.createTitledBorder(null, " Form Pelanggan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(27, 77, 62))); // NOI18N
         pnlForm.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         pnlForm.setPreferredSize(new java.awt.Dimension(760, 190));
 

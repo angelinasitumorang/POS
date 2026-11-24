@@ -27,16 +27,16 @@
               <Component id="pnlSidebar" min="-2" pref="215" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="pnlForm" pref="950" max="32767" attributes="0"/>
                   <Component id="lblJudul" min="-2" pref="192" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="txtCari" min="-2" pref="662" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnCari" min="-2" pref="112" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="pnlForm" alignment="0" pref="970" max="32767" attributes="0"/>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="80" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="60" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -481,9 +481,13 @@
     </Component>
     <Container class="javax.swing.JPanel" name="pnlForm">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title=" Form Pelanggan">
+              <Font PropertyName="font" name="Segoe UI" size="13" style="1"/>
               <Color PropertyName="color" blue="3e" green="4d" red="1b" type="rgb"/>
             </TitledBorder>
           </Border>
@@ -527,7 +531,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="45" max="32767" attributes="0"/>
+                  <EmptySpace pref="65" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
