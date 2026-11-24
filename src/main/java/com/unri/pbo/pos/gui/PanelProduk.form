@@ -29,23 +29,23 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="pnlSidebar" min="-2" pref="215" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" min="-2" pref="1020" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="lblJudul" min="-2" pref="249" max="-2" attributes="0"/>
-                  <Component id="pnlForm" min="-2" pref="1020" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="txtCari" min="-2" pref="662" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnCari" min="-2" pref="112" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="pnlForm" alignment="0" pref="980" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="37" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="pnlSidebar" pref="805" max="32767" attributes="0"/>
+          <Component id="pnlSidebar" pref="766" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
               <Component id="lblJudul" min="-2" max="-2" attributes="0"/>
@@ -60,7 +60,7 @@
                   <Component id="txtCari" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="370" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="341" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -137,7 +137,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblAdministrator" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="135" max="32767" attributes="0"/>
+                  <EmptySpace pref="96" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -489,6 +489,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Form Produk">
+              <Font PropertyName="font" name="Segoe UI" size="13" style="1"/>
               <Color PropertyName="color" blue="3e" green="4d" red="1b" type="rgb"/>
             </TitledBorder>
           </Border>
@@ -518,7 +519,7 @@
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="txtIdProduk" pref="180" max="32767" attributes="0"/>
+                          <Component id="txtIdProduk" pref="140" max="32767" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="txtNamaProduk" min="-2" pref="315" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -544,7 +545,7 @@
                       <Component id="txtHargaJual" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                       <Component id="txtStok" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace pref="29" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="btnHapus" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
@@ -793,9 +794,10 @@
               <Color blue="22" green="22" red="22" type="rgb"/>
             </Property>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="5" rowCount="4">
+              <Table columnCount="6" rowCount="4">
                 <Column editable="true" title="No" type="java.lang.Integer"/>
                 <Column editable="true" title="ID Produk" type="java.lang.String"/>
+                <Column editable="true" title="Nama Produk" type="java.lang.String"/>
                 <Column editable="true" title="Harga Beli" type="java.lang.String"/>
                 <Column editable="true" title="Harga Jual" type="java.lang.String"/>
                 <Column editable="true" title="Stok" type="java.lang.Integer"/>

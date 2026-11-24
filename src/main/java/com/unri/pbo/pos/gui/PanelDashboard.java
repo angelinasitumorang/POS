@@ -63,11 +63,11 @@ public class PanelDashboard extends javax.swing.JFrame {
         pnlDaftar = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPesanan = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
         btnSimpan = new javax.swing.JButton();
-        btnCetak = new javax.swing.JButton();
+        btnCetakNote = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -314,10 +314,9 @@ public class PanelDashboard extends javax.swing.JFrame {
         lblNoPesanan.setPreferredSize(new java.awt.Dimension(240, 24));
 
         pnlPelanggan.setBackground(new java.awt.Color(255, 255, 255));
-        pnlPelanggan.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Pelanggan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 13), new java.awt.Color(27, 77, 62))); // NOI18N
+        pnlPelanggan.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Pelanggan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(27, 77, 62))); // NOI18N
         pnlPelanggan.setPreferredSize(new java.awt.Dimension(370, 215));
 
-        txtIdPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txtIdPelanggan.setForeground(new java.awt.Color(34, 34, 34));
         txtIdPelanggan.setBorder(javax.swing.BorderFactory.createTitledBorder("ID Pelanggan"));
         txtIdPelanggan.setPreferredSize(new java.awt.Dimension(150, 26));
@@ -374,16 +373,16 @@ public class PanelDashboard extends javax.swing.JFrame {
                     .addComponent(cmbJenis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtIdPelanggan, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtNamaPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtNamaPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(pnlPelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAlamat, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlProduk.setBackground(new java.awt.Color(255, 255, 255));
-        pnlProduk.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pilih Oleh-oleh", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 13), new java.awt.Color(27, 77, 62))); // NOI18N
+        pnlProduk.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pilih Oleh-oleh", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(27, 77, 62))); // NOI18N
         pnlProduk.setForeground(new java.awt.Color(27, 77, 62));
         pnlProduk.setPreferredSize(new java.awt.Dimension(370, 215));
 
@@ -476,7 +475,7 @@ public class PanelDashboard extends javax.swing.JFrame {
         );
 
         pnlDaftar.setBackground(new java.awt.Color(255, 255, 255));
-        pnlDaftar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Daftar Pesanan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 13))); // NOI18N
+        pnlDaftar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Daftar Pesanan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
         pnlDaftar.setPreferredSize(new java.awt.Dimension(760, 200));
 
         tblPesanan.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -503,11 +502,11 @@ public class PanelDashboard extends javax.swing.JFrame {
         tblPesanan.setRowHeight(24);
         jScrollPane1.setViewportView(tblPesanan);
 
-        jButton1.setBackground(new java.awt.Color(192, 57, 43));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Hapus Pemesanan");
-        jButton1.setPreferredSize(new java.awt.Dimension(110, 28));
+        btnHapus.setBackground(new java.awt.Color(192, 57, 43));
+        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnHapus.setForeground(new java.awt.Color(255, 255, 255));
+        btnHapus.setText("Hapus Pemesanan");
+        btnHapus.setPreferredSize(new java.awt.Dimension(110, 28));
 
         btnUbah.setBackground(new java.awt.Color(107, 114, 128));
         btnUbah.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
@@ -536,7 +535,7 @@ public class PanelDashboard extends javax.swing.JFrame {
                     .addGroup(pnlDaftarLayout.createSequentialGroup()
                         .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(486, 486, 486)
                         .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -552,7 +551,7 @@ public class PanelDashboard extends javax.swing.JFrame {
                     .addGroup(pnlDaftarLayout.createSequentialGroup()
                         .addGroup(pnlDaftarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                            .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                         .addGap(16, 16, 16))
                     .addGroup(pnlDaftarLayout.createSequentialGroup()
                         .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -566,12 +565,12 @@ public class PanelDashboard extends javax.swing.JFrame {
         btnSimpan.setMargin(new java.awt.Insets(4, 12, 4, 12));
         btnSimpan.setPreferredSize(new java.awt.Dimension(130, 36));
 
-        btnCetak.setBackground(new java.awt.Color(242, 183, 5));
-        btnCetak.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnCetak.setForeground(new java.awt.Color(34, 34, 34));
-        btnCetak.setText("Cetak Note");
-        btnCetak.setMargin(new java.awt.Insets(4, 12, 4, 12));
-        btnCetak.setPreferredSize(new java.awt.Dimension(130, 36));
+        btnCetakNote.setBackground(new java.awt.Color(242, 183, 5));
+        btnCetakNote.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnCetakNote.setForeground(new java.awt.Color(34, 34, 34));
+        btnCetakNote.setText("Cetak Note");
+        btnCetakNote.setMargin(new java.awt.Insets(4, 12, 4, 12));
+        btnCetakNote.setPreferredSize(new java.awt.Dimension(130, 36));
 
         btnReset.setBackground(new java.awt.Color(107, 114, 128));
         btnReset.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
@@ -590,7 +589,7 @@ public class PanelDashboard extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCetakNote, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlContentLayout.createSequentialGroup()
@@ -617,13 +616,13 @@ public class PanelDashboard extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlPelanggan, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE))
                 .addGap(26, 26, 26)
                 .addComponent(pnlDaftar, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCetakNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -696,8 +695,9 @@ public class PanelDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCetak;
+    private javax.swing.JButton btnCetakNote;
     private javax.swing.JButton btnDashboard;
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnPelanggan;
     private javax.swing.JButton btnPembelian;
@@ -711,7 +711,6 @@ public class PanelDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnUbah;
     private javax.swing.JComboBox<String> cmbJenis;
     private javax.swing.JComboBox<String> cmbProduk;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAdministrator;
