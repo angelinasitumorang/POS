@@ -261,7 +261,6 @@ import javax.swing.border.EmptyBorder;
         warnaiMenu();
     }
 
-    /** Menu yang sedang dibuka diberi warna emas. */
     private void warnaiMenu() {
         for (int i = 0; i < btnMenu.length; i++) {
             boolean aktif = KUNCI[i].equals(halamanAktif);
