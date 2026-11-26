@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.unri.pbo.pos.gui;
 
@@ -8,15 +8,10 @@ package com.unri.pbo.pos.gui;
  *
  * @author angel
  */
-public class PanelSupplier extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelSupplier.class.getName());
+public class PanelSupplier extends javax.swing.JPanel {
 
-    public void refresh() {
-        
-    }
     /**
-     * Creates new form PembelianFrame
+     * Creates new form PanelSupplier
      */
     public PanelSupplier() {
         initComponents();
@@ -45,6 +40,7 @@ public class PanelSupplier extends javax.swing.JFrame {
         lblAdmin = new javax.swing.JLabel();
         lblAdministrator = new javax.swing.JLabel();
         btnKeluar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         lblJudul = new javax.swing.JLabel();
         pnlForm = new javax.swing.JPanel();
         txtId = new javax.swing.JTextField();
@@ -52,16 +48,14 @@ public class PanelSupplier extends javax.swing.JFrame {
         txtAlamat = new javax.swing.JTextField();
         txtTelepon = new javax.swing.JTextField();
         btnSimpan = new javax.swing.JButton();
+        txtPerusahaan = new javax.swing.JTextField();
         btnUbah = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnBersih = new javax.swing.JButton();
-        txtPerusahaan = new javax.swing.JTextField();
         txtCari = new javax.swing.JTextField();
         btnCari = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSupplier = new javax.swing.JTable();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlSidebar.setBackground(new java.awt.Color(27, 77, 62));
         pnlSidebar.setPreferredSize(new java.awt.Dimension(200, 800));
@@ -116,11 +110,12 @@ public class PanelSupplier extends javax.swing.JFrame {
             }
         });
 
-        btnSupplier.setBackground(new java.awt.Color(242, 183, 5));
-        btnSupplier.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnSupplier.setForeground(new java.awt.Color(27, 77, 62));
+        btnSupplier.setBackground(new java.awt.Color(42, 107, 85));
+        btnSupplier.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnSupplier.setForeground(new java.awt.Color(255, 255, 255));
         btnSupplier.setText("Supplier");
         btnSupplier.setBorderPainted(false);
+        btnSupplier.setContentAreaFilled(false);
         btnSupplier.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSupplier.setFocusPainted(false);
         btnSupplier.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -129,12 +124,11 @@ public class PanelSupplier extends javax.swing.JFrame {
         btnSupplier.setOpaque(true);
         btnSupplier.setPreferredSize(new java.awt.Dimension(180, 38));
 
-        btnPembelian.setBackground(new java.awt.Color(42, 107, 85));
-        btnPembelian.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnPembelian.setForeground(new java.awt.Color(255, 255, 255));
+        btnPembelian.setBackground(new java.awt.Color(242, 183, 5));
+        btnPembelian.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPembelian.setForeground(new java.awt.Color(27, 77, 62));
         btnPembelian.setText("Pembelian");
         btnPembelian.setBorderPainted(false);
-        btnPembelian.setContentAreaFilled(false);
         btnPembelian.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPembelian.setFocusPainted(false);
         btnPembelian.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -286,9 +280,11 @@ public class PanelSupplier extends javax.swing.JFrame {
                 .addContainerGap(142, Short.MAX_VALUE))
         );
 
+        jPanel1.setBackground(new java.awt.Color(251, 245, 234));
+
         lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblJudul.setForeground(new java.awt.Color(27, 77, 62));
-        lblJudul.setText("Data Supplier");
+        lblJudul.setText("Riwayat Transaksi");
         lblJudul.setPreferredSize(new java.awt.Dimension(420, 32));
 
         pnlForm.setBackground(new java.awt.Color(255, 255, 255));
@@ -328,6 +324,11 @@ public class PanelSupplier extends javax.swing.JFrame {
         btnSimpan.setMargin(new java.awt.Insets(4, 12, 4, 12));
         btnSimpan.setPreferredSize(new java.awt.Dimension(100, 30));
 
+        txtPerusahaan.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        txtPerusahaan.setForeground(new java.awt.Color(34, 34, 34));
+        txtPerusahaan.setBorder(javax.swing.BorderFactory.createTitledBorder("Nama Perusahaan"));
+        txtPerusahaan.setPreferredSize(new java.awt.Dimension(270, 26));
+
         btnUbah.setBackground(new java.awt.Color(107, 114, 128));
         btnUbah.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnUbah.setForeground(new java.awt.Color(255, 255, 255));
@@ -354,37 +355,30 @@ public class PanelSupplier extends javax.swing.JFrame {
             }
         });
 
-        txtPerusahaan.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        txtPerusahaan.setForeground(new java.awt.Color(34, 34, 34));
-        txtPerusahaan.setBorder(javax.swing.BorderFactory.createTitledBorder("Nama Perusahaan"));
-        txtPerusahaan.setPreferredSize(new java.awt.Dimension(270, 26));
-
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFormLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnBersih, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnBersih, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtAlamat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(57, 57, 57)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtTelepon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtPerusahaan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAlamat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(57, 57, 57)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtTelepon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPerusahaan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         pnlFormLayout.setVerticalGroup(
@@ -400,14 +394,12 @@ public class PanelSupplier extends javax.swing.JFrame {
                     .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPerusahaan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBersih, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10))
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                    .addComponent(btnUbah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBersih, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(46, 46, 46))
         );
 
         txtCari.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -457,44 +449,55 @@ public class PanelSupplier extends javax.swing.JFrame {
         tblSupplier.setRowHeight(24);
         jScrollPane1.setViewportView(tblSupplier);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(73, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE)
-                    .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
-                .addGap(0, 67, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
@@ -517,38 +520,14 @@ public class PanelSupplier extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBersihActionPerformed
 
-    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCariActionPerformed
-
     private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCariActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCariActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PanelSupplier().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBersih;
@@ -564,6 +543,7 @@ public class PanelSupplier extends javax.swing.JFrame {
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnSupplier;
     private javax.swing.JButton btnUbah;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAdministrator;

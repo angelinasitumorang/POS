@@ -1,57 +1,21 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.unri.pbo.pos.gui;
-import com.unri.pbo.pos.DataToko;
-import java.awt.Container;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.table.DefaultTableModel;
 
+/**
+ *
+ * @author angel
+ */
 public class PanelRiwayat extends javax.swing.JPanel {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelRiwayat.class.getName());
 
-        /** Dipanggil MainFrame setiap halaman Riwayat dibuka. */
-    public void refresh() {
-        if (model != null) {
-            tampilkan();
-        }
-    }
-     
+    /**
+     * Creates new form PanelRiwayat
+     */
     public PanelRiwayat() {
         initComponents();
-        initLogic();
     }
-    
-    private DefaultTableModel model;
- 
-    private void initLogic() {
-    // kolom tabel diatur dari kode, jadi tidak perlu diatur di tab Design
-    model = DataToko.buatModel("No", "Waktu", "Jenis", "ID Transaksi", "Aksi", "Detail",
-            "Lama", "Baru", "Admin", "Alasan");
-    tblRiwayat.setModel(model);
-    cmbJenis.setModel(new DefaultComboBoxModel<>(new String[]{"Semua", "Penjualan", "Pembelian"}));
- 
-    btnTampilkan.addActionListener(e -> tampilkan());
-    txtIdTransaksi.addActionListener(e -> tampilkan());
-    cmbJenis.addActionListener(e -> tampilkan());
- 
-    refresh();
-}
- 
-    private void tampilkan() {
-    model.setRowCount(0);
-    try {
-        int no = 1;
-        for (String[] b : DataToko.ambilRiwayat(String.valueOf(cmbJenis.getSelectedItem()),
-                txtIdTransaksi.getText())) {
-            model.addRow(new Object[]{no++, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]});
-        }
-    } catch (RuntimeException ex) {
-        DataToko.galat(this, DataToko.pesanGalat(ex));
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,14 +40,13 @@ public class PanelRiwayat extends javax.swing.JPanel {
         lblAdmin = new javax.swing.JLabel();
         lblAdministrator = new javax.swing.JLabel();
         btnKeluar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         lblJudul = new javax.swing.JLabel();
         cmbJenis = new javax.swing.JComboBox<>();
         txtIdTransaksi = new javax.swing.JTextField();
         btnTampilkan = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRiwayat = new javax.swing.JTable();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlSidebar.setBackground(new java.awt.Color(27, 77, 62));
         pnlSidebar.setPreferredSize(new java.awt.Dimension(200, 800));
@@ -152,12 +115,11 @@ public class PanelRiwayat extends javax.swing.JPanel {
         btnSupplier.setOpaque(true);
         btnSupplier.setPreferredSize(new java.awt.Dimension(180, 38));
 
-        btnPembelian.setBackground(new java.awt.Color(42, 107, 85));
-        btnPembelian.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnPembelian.setForeground(new java.awt.Color(255, 255, 255));
+        btnPembelian.setBackground(new java.awt.Color(242, 183, 5));
+        btnPembelian.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPembelian.setForeground(new java.awt.Color(27, 77, 62));
         btnPembelian.setText("Pembelian");
         btnPembelian.setBorderPainted(false);
-        btnPembelian.setContentAreaFilled(false);
         btnPembelian.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPembelian.setFocusPainted(false);
         btnPembelian.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -185,11 +147,12 @@ public class PanelRiwayat extends javax.swing.JPanel {
         btnPenjualan.setOpaque(true);
         btnPenjualan.setPreferredSize(new java.awt.Dimension(180, 38));
 
-        btnRiwayat.setBackground(new java.awt.Color(242, 183, 5));
-        btnRiwayat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnRiwayat.setForeground(new java.awt.Color(27, 77, 62));
+        btnRiwayat.setBackground(new java.awt.Color(42, 107, 85));
+        btnRiwayat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnRiwayat.setForeground(new java.awt.Color(255, 255, 255));
         btnRiwayat.setText("Riwayat Transaksi");
         btnRiwayat.setBorderPainted(false);
+        btnRiwayat.setContentAreaFilled(false);
         btnRiwayat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRiwayat.setFocusPainted(false);
         btnRiwayat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -308,6 +271,8 @@ public class PanelRiwayat extends javax.swing.JPanel {
                 .addContainerGap(142, Short.MAX_VALUE))
         );
 
+        jPanel1.setBackground(new java.awt.Color(251, 245, 234));
+
         lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblJudul.setForeground(new java.awt.Color(27, 77, 62));
         lblJudul.setText("Riwayat Transaksi");
@@ -358,42 +323,57 @@ public class PanelRiwayat extends javax.swing.JPanel {
         tblRiwayat.setRowHeight(24);
         jScrollPane1.setViewportView(tblRiwayat);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(cmbJenis, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtIdTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(124, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtIdTransaksi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbJenis, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(94, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cmbJenis, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtIdTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 49, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtIdTransaksi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbJenis, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
-                    .addComponent(btnTampilkan, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
@@ -412,30 +392,6 @@ public class PanelRiwayat extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTampilkanActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PanelRiwayat().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDashboard;
@@ -448,6 +404,7 @@ public class PanelRiwayat extends javax.swing.JPanel {
     private javax.swing.JButton btnSupplier;
     private javax.swing.JButton btnTampilkan;
     private javax.swing.JComboBox<String> cmbJenis;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAdministrator;
@@ -459,16 +416,4 @@ public class PanelRiwayat extends javax.swing.JPanel {
     private javax.swing.JTable tblRiwayat;
     private javax.swing.JTextField txtIdTransaksi;
     // End of variables declaration//GEN-END:variables
-
-    private Container getContentPane() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    private void pack() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    private void setDefaultCloseOperation(int EXIT_ON_CLOSE) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

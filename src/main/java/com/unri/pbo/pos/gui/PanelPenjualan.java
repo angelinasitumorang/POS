@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.unri.pbo.pos.gui;
 
@@ -8,15 +8,10 @@ package com.unri.pbo.pos.gui;
  *
  * @author angel
  */
-public class PanelPenjualan extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelPenjualan.class.getName());
+public class PanelPenjualan extends javax.swing.JPanel {
 
-    public void refresh() {
-        
-    }
     /**
-     * Creates new form ProdukFrame
+     * Creates new form PanelPenjualan
      */
     public PanelPenjualan() {
         initComponents();
@@ -45,21 +40,20 @@ public class PanelPenjualan extends javax.swing.JFrame {
         lblAdmin = new javax.swing.JLabel();
         lblAdministrator = new javax.swing.JLabel();
         btnKeluar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         lblJudul = new javax.swing.JLabel();
+        pnlDetail = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDetail = new javax.swing.JTable();
+        lblTotalDetail = new javax.swing.JLabel();
         cmbStatus = new javax.swing.JComboBox<>();
         txtCari = new javax.swing.JTextField();
         btnCari = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPenjualan = new javax.swing.JTable();
-        pnlDetail = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblDetail = new javax.swing.JTable();
-        lblTotalDetail = new javax.swing.JLabel();
         btnPesanBaru = new javax.swing.JButton();
         btnCetakNote = new javax.swing.JButton();
         btnBatalkan = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlSidebar.setBackground(new java.awt.Color(27, 77, 62));
         pnlSidebar.setPreferredSize(new java.awt.Dimension(200, 800));
@@ -128,12 +122,11 @@ public class PanelPenjualan extends javax.swing.JFrame {
         btnSupplier.setOpaque(true);
         btnSupplier.setPreferredSize(new java.awt.Dimension(180, 38));
 
-        btnPembelian.setBackground(new java.awt.Color(42, 107, 85));
-        btnPembelian.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnPembelian.setForeground(new java.awt.Color(255, 255, 255));
+        btnPembelian.setBackground(new java.awt.Color(242, 183, 5));
+        btnPembelian.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPembelian.setForeground(new java.awt.Color(27, 77, 62));
         btnPembelian.setText("Pembelian");
         btnPembelian.setBorderPainted(false);
-        btnPembelian.setContentAreaFilled(false);
         btnPembelian.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPembelian.setFocusPainted(false);
         btnPembelian.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -147,11 +140,12 @@ public class PanelPenjualan extends javax.swing.JFrame {
             }
         });
 
-        btnPenjualan.setBackground(new java.awt.Color(242, 183, 5));
-        btnPenjualan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnPenjualan.setForeground(new java.awt.Color(27, 77, 62));
+        btnPenjualan.setBackground(new java.awt.Color(42, 107, 85));
+        btnPenjualan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnPenjualan.setForeground(new java.awt.Color(255, 255, 255));
         btnPenjualan.setText("Penjualan");
         btnPenjualan.setBorderPainted(false);
+        btnPenjualan.setContentAreaFilled(false);
         btnPenjualan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPenjualan.setFocusPainted(false);
         btnPenjualan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -284,10 +278,64 @@ public class PanelPenjualan extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel1.setBackground(new java.awt.Color(251, 245, 234));
+
         lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         lblJudul.setForeground(new java.awt.Color(27, 77, 62));
         lblJudul.setText("Daftar Penjualan");
         lblJudul.setPreferredSize(new java.awt.Dimension(420, 32));
+
+        pnlDetail.setBackground(new java.awt.Color(255, 255, 255));
+        pnlDetail.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Penjualan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(27, 77, 62))); // NOI18N
+        pnlDetail.setPreferredSize(new java.awt.Dimension(760, 205));
+
+        tblDetail.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        tblDetail.setForeground(new java.awt.Color(34, 34, 34));
+        tblDetail.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID Produk", "Produk", "Harga", "Jumlah", "Subtotal"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblDetail.setRowHeight(24);
+        jScrollPane1.setViewportView(tblDetail);
+
+        lblTotalDetail.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lblTotalDetail.setForeground(new java.awt.Color(27, 77, 62));
+        lblTotalDetail.setPreferredSize(new java.awt.Dimension(240, 24));
+
+        javax.swing.GroupLayout pnlDetailLayout = new javax.swing.GroupLayout(pnlDetail);
+        pnlDetail.setLayout(pnlDetailLayout);
+        pnlDetailLayout.setHorizontalGroup(
+            pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDetailLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTotalDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 932, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
+        );
+        pnlDetailLayout.setVerticalGroup(
+            pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDetailLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblTotalDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         cmbStatus.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         cmbStatus.setForeground(new java.awt.Color(34, 34, 34));
@@ -335,59 +383,6 @@ public class PanelPenjualan extends javax.swing.JFrame {
         tblPenjualan.setRowHeight(24);
         jScrollPane2.setViewportView(tblPenjualan);
 
-        pnlDetail.setBackground(new java.awt.Color(255, 255, 255));
-        pnlDetail.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Penjualan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(27, 77, 62))); // NOI18N
-        pnlDetail.setPreferredSize(new java.awt.Dimension(760, 205));
-
-        tblDetail.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        tblDetail.setForeground(new java.awt.Color(34, 34, 34));
-        tblDetail.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID Produk", "Produk", "Harga", "Jumlah", "Subtotal"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tblDetail.setRowHeight(24);
-        jScrollPane1.setViewportView(tblDetail);
-
-        lblTotalDetail.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lblTotalDetail.setForeground(new java.awt.Color(27, 77, 62));
-        lblTotalDetail.setPreferredSize(new java.awt.Dimension(240, 24));
-
-        javax.swing.GroupLayout pnlDetailLayout = new javax.swing.GroupLayout(pnlDetail);
-        pnlDetail.setLayout(pnlDetailLayout);
-        pnlDetailLayout.setHorizontalGroup(
-            pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlDetailLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblTotalDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 932, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pnlDetailLayout.setVerticalGroup(
-            pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlDetailLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblTotalDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-
         btnPesanBaru.setBackground(new java.awt.Color(27, 77, 62));
         btnPesanBaru.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnPesanBaru.setForeground(new java.awt.Color(255, 255, 255));
@@ -408,56 +403,70 @@ public class PanelPenjualan extends javax.swing.JFrame {
         btnBatalkan.setText("Batalkan Transaksi");
         btnBatalkan.setPreferredSize(new java.awt.Dimension(110, 28));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnPesanBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCetakNote, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblJudul, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
                         .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 995, Short.MAX_VALUE)
-                    .addComponent(pnlDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 995, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnPesanBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCetakNote, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 42, Short.MAX_VALUE))
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlDetail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1015, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCetakNote, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPesanBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(pnlDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnPesanBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCetakNote, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52))
+            .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
@@ -476,30 +485,6 @@ public class PanelPenjualan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCariActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PanelPenjualan().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatalkan;
@@ -515,6 +500,7 @@ public class PanelPenjualan extends javax.swing.JFrame {
     private javax.swing.JButton btnRiwayat;
     private javax.swing.JButton btnSupplier;
     private javax.swing.JComboBox<String> cmbStatus;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAdmin;

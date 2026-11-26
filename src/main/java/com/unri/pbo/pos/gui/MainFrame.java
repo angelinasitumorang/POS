@@ -60,13 +60,13 @@ import javax.swing.border.EmptyBorder;
     private final JButton btnKeluar = new JButton("Keluar");
 
     // ---------------- halaman ----------------
-    private final PanelDashboard pDashboard = new PanelDashboard();
-    private final PanelProduk pProduk = new PanelProduk();
-    private final PanelPelanggan pPelanggan = new PanelPelanggan();
-    private final PanelSupplier pSupplier = new PanelSupplier();
-    private final PanelPembelian pPembelian = new PanelPembelian();
-    private final PanelPenjualan pPenjualan = new PanelPenjualan();
-    private final PanelRiwayat pRiwayat = new PanelRiwayat();
+    private final FrameDashboard pDashboard = new FrameDashboard();
+    private final FrameProduk pProduk = new FrameProduk();
+    private final FramePelanggan pPelanggan = new FramePelanggan();
+    private final FrameSupplier pSupplier = new FrameSupplier();
+    private final FramePembelian pPembelian = new FramePembelian();
+    private final FramePenjualan pPenjualan = new FramePenjualan();
+    private final FrameRiwayat pRiwayat = new FrameRiwayat();
 
     private String halamanAktif = "";
 

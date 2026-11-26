@@ -1,60 +1,21 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
 package com.unri.pbo.pos.gui;
-import java.awt.event.ActionEvent;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.table.DefaultTableModel;
 
-    public class PanelDashboard extends javax.swing.JFrame {
+/**
+ *
+ * @author angel
+ */
+public class PanelDashboard extends javax.swing.JPanel {
 
-        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelDashboard.class.getName());
-
-        /**
-         * Creates new form MainFrame
-         */
-        private DefaultTableModel model;
-        private final List<ProdukItem> daftarProduk = new ArrayList<>();
-        private final NumberFormat rp = NumberFormat.getInstance(new Locale("id", "ID"));
-        private int urutanPesanan = 1;
-        private int noDetail = 0;
-        private String idPesanan;
-
-        public void refresh() {
-            
-        }
-        
-        private static class ProdukItem {
-
-            String id, nama;
-            int harga, stok;
-
-            ProdukItem(String id, String nama, int harga, int stok) {
-                this.id = id;
-                this.nama = nama;
-                this.harga = harga;
-                this.stok = stok;
-            }
-        }
-
-        public PanelDashboard() {
-            initComponents();
-            getContentPane().removeAll();
-            getContentPane().setLayout(new java.awt.BorderLayout());
-            getContentPane().add(pnlSidebar, java.awt.BorderLayout.WEST);
-            javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(pnlContent);
-            scroll.setBorder(null);
-            scroll.getVerticalScrollBar().setUnitIncrement(16);
-            getContentPane().add(scroll, java.awt.BorderLayout.CENTER);
-            siapkanTabel();
-            siapkanProduk();
-            siapkanForm();
-            pasangEvent();
-            pesananBaru();
-        }
-    
+    /**
+     * Creates new form PanelDashboard
+     */
+    public PanelDashboard() {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,12 +65,6 @@ import javax.swing.table.DefaultTableModel;
         btnSimpan = new javax.swing.JButton();
         btnCetakNote = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 204, 204));
-        setName("Dashboard"); // NOI18N
-        setUndecorated(true);
-        setSize(new java.awt.Dimension(1280, 800));
 
         pnlSidebar.setBackground(new java.awt.Color(27, 77, 62));
         pnlSidebar.setPreferredSize(new java.awt.Dimension(200, 800));
@@ -328,7 +283,7 @@ import javax.swing.table.DefaultTableModel;
                     .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblAdministrator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(142, Short.MAX_VALUE))
         );
 
         pnlContent.setBackground(new java.awt.Color(251, 245, 234));
@@ -488,9 +443,7 @@ import javax.swing.table.DefaultTableModel;
                             .addComponent(txtCatatan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(pnlProdukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlProdukLayout.createSequentialGroup()
-                                .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(spnJumlah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(cmbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26))
@@ -646,12 +599,12 @@ import javax.swing.table.DefaultTableModel;
                         .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlContentLayout.createSequentialGroup()
                                 .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 357, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
                                 .addComponent(lblNoPesanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(pnlDaftar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1021, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlContentLayout.createSequentialGroup()
                                 .addComponent(pnlPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                                 .addComponent(pnlProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(42, 42, 42))
         );
@@ -676,8 +629,8 @@ import javax.swing.table.DefaultTableModel;
                 .addGap(16, 16, 16))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -689,16 +642,17 @@ import javax.swing.table.DefaultTableModel;
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(pnlContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPembelianActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
+    private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPelangganActionPerformed
+
+    private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
         ubahJumlah();
     }//GEN-LAST:event_btnPembelianActionPerformed
 
@@ -706,267 +660,79 @@ import javax.swing.table.DefaultTableModel;
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdPelangganActionPerformed
 
-    private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
+    private void cmbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdukActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnPelangganActionPerformed
+    }//GEN-LAST:event_cmbProdukActionPerformed
 
     private void txtStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStokActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStokActionPerformed
 
-    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        ubahJumlah();
-    }//GEN-LAST:event_btnUbahActionPerformed
-
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTambahActionPerformed
-
-    private void cmbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdukActionPerformed
-            // TODO add your handling code here:
-    }//GEN-LAST:event_cmbProdukActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHapusActionPerformed
 
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        ubahJumlah();
+    }//GEN-LAST:event_btnUbahActionPerformed
+
     private void btnCetakNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakNoteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCetakNoteActionPerformed
-    private void siapkanTabel() {
-        model = new DefaultTableModel(
-                new Object[]{"No", "ID Detail", "Produk", "Harga (Rp)", "Jumlah", "Subtotal (Rp)"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int col) {
-                return false;
-            }
-        };
-        tblPesanan.setModel(model);
-    }
-
-    private void siapkanProduk() {
-        daftarProduk.clear();
-        daftarProduk.add(new ProdukItem("BRG001", "Bolu Kemojo", 45000, 20));
-        daftarProduk.add(new ProdukItem("BRG002", "Lempuk Durian", 30000, 15));
-        daftarProduk.add(new ProdukItem("BRG003", "Keripik Nenas", 25000, 30));
-        daftarProduk.add(new ProdukItem("BRG004", "Ketan Talam Durian", 35000, 50));
-        daftarProduk.add(new ProdukItem("BRG005", "Kacang Pukul", 15000, 40));
-        daftarProduk.add(new ProdukItem("BRG006", "Pancake Durian", 45000, 20));
-        daftarProduk.add(new ProdukItem("BRG007", "Roti Jala Kuah Durian", 20000, 25));
-        daftarProduk.add(new ProdukItem("BRG008", "Pancake Durian", 45000, 20));
-        daftarProduk.add(new ProdukItem("BRG009", "Kue Bangkit", 30000, 50));
-        daftarProduk.add(new ProdukItem("BRG0010", "Dodol Kedondong", 25000, 60));
-        cmbProduk.removeAllItems();
-        for (ProdukItem p : daftarProduk) {
-            cmbProduk.addItem(p.nama);
-        }
-    }
-
-    private void siapkanForm() {
-        cmbJenis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Umum", "Member"}));
-        spnJumlah.setModel(new SpinnerNumberModel(1, 1, 9999, 1));
-        txtHarga.setEditable(false);
-        txtStok.setEditable(false);
-        tampilkanDetailProduk();
-    }
-
-    private void pasangEvent() {
-        cmbProduk.addActionListener(e -> tampilkanDetailProduk());
-        btnTambah.addActionListener(e -> tambahItem());
-        btnHapus.addActionListener(e -> hapusItem());
-        btnReset.addActionListener(e -> resetForm());
-        btnCetakNote.addActionListener(e -> cetakNota());
-        btnSimpan.addActionListener(e -> simpanPesanan());
-    }
-
-    private void pesananBaru() {
-        idPesanan = String.format("PJ%03d", urutanPesanan);
-        lblNoPesanan.setText("No. Pesanan: " + idPesanan);
-        noDetail = 0;
-    }
-
-    private void tampilkanDetailProduk() {
-        int i = cmbProduk.getSelectedIndex();
-        if (i < 0) {
-            return;
-        }
-        ProdukItem p = daftarProduk.get(i);
-        txtHarga.setText("Rp " + rp.format(p.harga));
-        txtStok.setText(String.valueOf(p.stok));
-    }
-
-    private int cariBaris(String namaProduk) {
-        for (int r = 0; r < model.getRowCount(); r++) {
-            if (model.getValueAt(r, 2).equals(namaProduk)) {
-                return r;
-            }
-        }
-        return -1;
-    }
-
-    private void tambahItem() {
-        int i = cmbProduk.getSelectedIndex();
-        if (i < 0) {
-            return;
-        }
-        ProdukItem p = daftarProduk.get(i);
-        int jumlah = (int) spnJumlah.getValue();
-        int baris = cariBaris(p.nama);
-        int sudah = (baris >= 0) ? (int) model.getValueAt(baris, 4) : 0;
-
-        if (sudah + jumlah > p.stok) {
-            JOptionPane.showMessageDialog(this, "Stok tidak cukup! Sisa stok: " + p.stok);
-            return;
-        }
-        if (baris >= 0) {
-            int qty = sudah + jumlah;
-            model.setValueAt(qty, baris, 4);
-            model.setValueAt(qty * p.harga, baris, 5);
-        } else {
-            noDetail++;
-            model.addRow(new Object[]{
-                model.getRowCount() + 1, idPesanan + "-D" + noDetail,
-                p.nama, p.harga, jumlah, p.harga * jumlah
-            });
-        }
-        spnJumlah.setValue(1);
-        hitungTotal();
-    }
-
-    private void ubahJumlah() {
-        int r = tblPesanan.getSelectedRow();
-        if (r < 0) {
-            JOptionPane.showMessageDialog(this, "Pilih baris pesanan dulu!");
-            return;
-        }
-        String input = JOptionPane.showInputDialog(this, "Jumlah baru:", model.getValueAt(r, 4));
-        if (input == null) {
-            return;
-        }
-        try {
-            int qty = Integer.parseInt(input.trim());
-            if (qty < 1) {
-                throw new NumberFormatException();
-            }
-            int stok = stokProduk((String) model.getValueAt(r, 2));
-            if (qty > stok) {
-                JOptionPane.showMessageDialog(this, "Stok tidak cukup! Sisa stok: " + stok);
-                return;
-            }
-            int harga = (int) model.getValueAt(r, 3);
-            model.setValueAt(qty, r, 4);
-            model.setValueAt(qty * harga, r, 5);
-            hitungTotal();
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Masukkan angka bulat lebih dari 0.");
-        }
-    }
-
-    private int stokProduk(String nama) {
-        for (ProdukItem p : daftarProduk) {
-            if (p.nama.equals(nama)) {
-                return p.stok;
-            }
-        }
-        return 0;
-    }
-
-    private void hapusItem() {
-        int r = tblPesanan.getSelectedRow();
-        if (r < 0) {
-            JOptionPane.showMessageDialog(this, "Pilih baris yang mau dihapus!");
-            return;
-        }
-        model.removeRow(r);
-        for (int i = 0; i < model.getRowCount(); i++) {
-            model.setValueAt(i + 1, i, 0);
-        }
-        hitungTotal();
-    }
-
-    private int hitungTotal() {
-        int total = 0;
-        for (int r = 0; r < model.getRowCount(); r++) {
-            total += (int) model.getValueAt(r, 5);
-        }
-        lblTotal.setText("Rp " + rp.format(total));
-        return total;
-    }
-
-    private void resetForm() {
-        model.setRowCount(0);
-        txtIdPelanggan.setText("");
-        txtNamaPelanggan.setText("");
-        txtTelepon.setText("");
-        txtAlamat.setText("");
-        txtCatatan.setText("");
-        cmbJenis.setSelectedIndex(0);
-        if (cmbProduk.getItemCount() > 0) {
-            cmbProduk.setSelectedIndex(0);
-        }
-        spnJumlah.setValue(1);
-        noDetail = 0;
-        hitungTotal();
-    }
-
-    private void cetakNota() {
         if (model.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Belum ada pesanan.");
+            JOptionPane.showMessageDialog(this, "Belum ada pesanan.", "Info", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+
+        String namaPelanggan = txtNamaPelanggan.getText().trim();
+        if (namaPelanggan.isEmpty()) {
+            namaPelanggan = "-";
+        }
+
+        String jenisPelanggan = cmbJenis.getSelectedItem() != null
+        ? cmbJenis.getSelectedItem().toString()
+        : "-";
+
+        String catatan = txtCatatan.getText().trim();
+
         StringBuilder sb = new StringBuilder();
-        sb.append("=== KhasKita ===\n").append(idPesanan).append("\n")
-                .append("Pelanggan: ").append(txtNamaPelanggan.getText()).append("\n\n");
+        sb.append("=== KHASKITA - NOTA PESANAN ===\n");
+        sb.append("No. Pesanan : ").append(idPesanan).append("\n");
+        sb.append("Pelanggan   : ").append(namaPelanggan).append(" (").append(jenisPelanggan).append(")\n");
+        if (!catatan.isEmpty()) {
+            sb.append("Catatan     : ").append(catatan).append("\n");
+        }
+        sb.append("--------------------------------\n");
+
         for (int r = 0; r < model.getRowCount(); r++) {
-            sb.append(model.getValueAt(r, 2)).append("  ")
-                    .append(model.getValueAt(r, 4)).append(" x ")
-                    .append(rp.format(model.getValueAt(r, 3))).append(" = ")
-                    .append(rp.format(model.getValueAt(r, 5))).append("\n");
-        }
-        sb.append("\nTotal: ").append(lblTotal.getText());
-        JOptionPane.showMessageDialog(this, sb.toString(), "Nota", JOptionPane.PLAIN_MESSAGE);
-    }
+            String produk = String.valueOf(model.getValueAt(r, 2));
+            int jumlah = Integer.parseInt(String.valueOf(model.getValueAt(r, 4)));
+            int harga = Integer.parseInt(String.valueOf(model.getValueAt(r, 3)));
+            int subtotal = Integer.parseInt(String.valueOf(model.getValueAt(r, 5)));
 
-    private void simpanPesanan() {
-        if (txtNamaPelanggan.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama pelanggan wajib diisi!");
-            return;
+            sb.append(produk).append("\n")
+            .append("  ").append(jumlah).append(" x Rp ").append(rp.format(harga))
+            .append(" = Rp ").append(rp.format(subtotal)).append("\n");
         }
-        if (model.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Daftar pesanan masih kosong!");
-            return;
-        }
-        // TODO: simpan ke database lewat Koneksi.java
-        JOptionPane.showMessageDialog(this, "Pesanan " + idPesanan + " tersimpan.\nTotal: " + lblTotal.getText());
-        urutanPesanan++;
-        resetForm();
-        pesananBaru();
-    }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        sb.append("--------------------------------\n");
+        sb.append("TOTAL: ").append(lblTotal.getText());
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PanelDashboard().setVisible(true));
-    }
+        javax.swing.JTextArea areaNota = new javax.swing.JTextArea(sb.toString());
+        areaNota.setEditable(false);
+        areaNota.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+
+        JOptionPane.showMessageDialog(
+            this,
+            new javax.swing.JScrollPane(areaNota),
+            "Nota " + idPesanan,
+            JOptionPane.PLAIN_MESSAGE
+        );
+    }//GEN-LAST:event_btnCetakNoteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCetakNote;

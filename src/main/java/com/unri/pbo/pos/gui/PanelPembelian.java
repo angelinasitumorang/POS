@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.unri.pbo.pos.gui;
 
@@ -8,15 +8,10 @@ package com.unri.pbo.pos.gui;
  *
  * @author angel
  */
-public class PanelPembelian extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelPembelian.class.getName());
-    
-    public void refresh() {
-        
-    }
+public class PanelPembelian extends javax.swing.JPanel {
+
     /**
-     * Creates new form PenjualanFrame
+     * Creates new form PanelPembelian
      */
     public PanelPembelian() {
         initComponents();
@@ -45,7 +40,8 @@ public class PanelPembelian extends javax.swing.JFrame {
         lblAdmin = new javax.swing.JLabel();
         lblAdministrator = new javax.swing.JLabel();
         btnKeluar = new javax.swing.JButton();
-        lblJudul = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        lblJudul1 = new javax.swing.JLabel();
         pnlInput = new javax.swing.JPanel();
         cmbSupplier = new javax.swing.JComboBox<>();
         cmbProduk = new javax.swing.JComboBox<>();
@@ -59,11 +55,9 @@ public class PanelPembelian extends javax.swing.JFrame {
         btnHapus = new javax.swing.JButton();
         btnUbah = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
-        btnBatalkan = new javax.swing.JButton();
         btnCetak = new javax.swing.JButton();
         btnFinalisasi = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        btnBatalkan = new javax.swing.JButton();
 
         pnlSidebar.setBackground(new java.awt.Color(27, 77, 62));
         pnlSidebar.setPreferredSize(new java.awt.Dimension(200, 800));
@@ -285,13 +279,15 @@ public class PanelPembelian extends javax.swing.JFrame {
                     .addComponent(btnKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblAdministrator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
 
-        lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        lblJudul.setForeground(new java.awt.Color(27, 77, 62));
-        lblJudul.setText("Pembelian Barang dari Supplier (Restock)");
-        lblJudul.setPreferredSize(new java.awt.Dimension(420, 32));
+        jPanel1.setBackground(new java.awt.Color(251, 245, 234));
+
+        lblJudul1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblJudul1.setForeground(new java.awt.Color(27, 77, 62));
+        lblJudul1.setText("Data Pelanggan");
+        lblJudul1.setPreferredSize(new java.awt.Dimension(420, 32));
 
         pnlInput.setBackground(new java.awt.Color(255, 255, 255));
         pnlInput.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Pembelian", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13), new java.awt.Color(27, 77, 62))); // NOI18N
@@ -314,6 +310,11 @@ public class PanelPembelian extends javax.swing.JFrame {
         cmbProduk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbProduk.setBorder(javax.swing.BorderFactory.createTitledBorder("Produk"));
         cmbProduk.setPreferredSize(new java.awt.Dimension(220, 26));
+        cmbProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProdukActionPerformed(evt);
+            }
+        });
 
         spnJumlah.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         spnJumlah.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
@@ -324,6 +325,11 @@ public class PanelPembelian extends javax.swing.JFrame {
         txtId.setForeground(new java.awt.Color(34, 34, 34));
         txtId.setBorder(javax.swing.BorderFactory.createTitledBorder("Harga Beli"));
         txtId.setPreferredSize(new java.awt.Dimension(130, 26));
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
 
         txtAlamat.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txtAlamat.setForeground(new java.awt.Color(34, 34, 34));
@@ -336,6 +342,11 @@ public class PanelPembelian extends javax.swing.JFrame {
         btnTambah.setText("Tambah ke Pembelian");
         btnTambah.setMargin(new java.awt.Insets(4, 12, 4, 12));
         btnTambah.setPreferredSize(new java.awt.Dimension(175, 26));
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlInputLayout = new javax.swing.GroupLayout(pnlInput);
         pnlInput.setLayout(pnlInputLayout);
@@ -353,7 +364,7 @@ public class PanelPembelian extends javax.swing.JFrame {
                         .addComponent(cmbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
                         .addComponent(cmbProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(spnJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -364,7 +375,7 @@ public class PanelPembelian extends javax.swing.JFrame {
             .addGroup(pnlInputLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbSupplier, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(cmbSupplier, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                     .addComponent(cmbProduk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(spnJumlah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -440,20 +451,20 @@ public class PanelPembelian extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlDetailLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(43, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         pnlDetailLayout.setVerticalGroup(
             pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDetailLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addGroup(pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDetailLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addGroup(pnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -464,19 +475,17 @@ public class PanelPembelian extends javax.swing.JFrame {
                         .addContainerGap())))
         );
 
-        btnBatalkan.setBackground(new java.awt.Color(192, 57, 43));
-        btnBatalkan.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnBatalkan.setForeground(new java.awt.Color(255, 255, 255));
-        btnBatalkan.setText("Batalkan Transaksi");
-        btnBatalkan.setMargin(new java.awt.Insets(4, 12, 4, 12));
-        btnBatalkan.setPreferredSize(new java.awt.Dimension(110, 36));
-
         btnCetak.setBackground(new java.awt.Color(242, 183, 5));
         btnCetak.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnCetak.setForeground(new java.awt.Color(34, 34, 34));
         btnCetak.setText("Cek Bukti");
         btnCetak.setMargin(new java.awt.Insets(4, 12, 4, 12));
         btnCetak.setPreferredSize(new java.awt.Dimension(130, 36));
+        btnCetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCetakActionPerformed(evt);
+            }
+        });
 
         btnFinalisasi.setBackground(new java.awt.Color(27, 77, 62));
         btnFinalisasi.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
@@ -484,46 +493,74 @@ public class PanelPembelian extends javax.swing.JFrame {
         btnFinalisasi.setText("Finalisasi Pembelian");
         btnFinalisasi.setMargin(new java.awt.Insets(4, 12, 4, 12));
         btnFinalisasi.setPreferredSize(new java.awt.Dimension(130, 36));
+        btnFinalisasi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalisasiActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(pnlInput, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE)
-                        .addComponent(pnlDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+        btnBatalkan.setBackground(new java.awt.Color(192, 57, 43));
+        btnBatalkan.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnBatalkan.setForeground(new java.awt.Color(255, 255, 255));
+        btnBatalkan.setText("Batalkan Transaksi");
+        btnBatalkan.setMargin(new java.awt.Insets(4, 12, 4, 12));
+        btnBatalkan.setPreferredSize(new java.awt.Dimension(110, 36));
+        btnBatalkan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalkanActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnFinalisasi, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnFinalisasi, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 46, Short.MAX_VALUE))
+                        .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblJudul1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlInput, javax.swing.GroupLayout.DEFAULT_SIZE, 1017, Short.MAX_VALUE)
+                        .addComponent(pnlDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 1017, Short.MAX_VALUE)))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(lblJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlInput, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(lblJudul1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(pnlInput, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pnlDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBatalkan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFinalisasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pack();
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
@@ -538,38 +575,198 @@ public class PanelPembelian extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
+    private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
+        // TODO add your handling code here:
+        Object terpilih = cmbSupplier.getSelectedItem();
+        if (terpilih != null) {
+        }
+    }//GEN-LAST:event_cmbSupplierActionPerformed
+
+    private void cmbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdukActionPerformed
+        // TODO add your handling code here:
+        Object produkTerpilih = cmbProduk.getSelectedItem();
+        if (produkTerpilih != null) {
+        }
+    }//GEN-LAST:event_cmbProdukActionPerformed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
+
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUbahActionPerformed
 
-    private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbSupplierActionPerformed
+        javax.swing.table.TableModel tm = tblDetail.getModel();
+        boolean adaIsi = false;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        for (int r = 0; r < tm.getRowCount(); r++) {
+            Object produk = tm.getValueAt(r, 2);
+            Object jumlah = tm.getValueAt(r, 4);
+            if (produk != null && !produk.toString().trim().isEmpty()
+                && jumlah != null && !jumlah.toString().trim().isEmpty()) {
+                adaIsi = true;
+                break;
+            }
+        }
+
+        if (!adaIsi) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Belum ada item pembelian di daftar.",
+                "Cek Bukti",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+
+        String supplier = cmbSupplier.getSelectedItem() != null
+        ? cmbSupplier.getSelectedItem().toString()
+        : "-";
+        String catatan = txtAlamat.getText().trim();
+        String totalText = lblTotal.getText() != null && !lblTotal.getText().trim().isEmpty()
+        ? lblTotal.getText().trim()
+        : "-";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== KHASKITA - BUKTI PEMBELIAN (RESTOCK) ===\n");
+        sb.append("Supplier : ").append(supplier).append("\n");
+        if (!catatan.isEmpty()) {
+            sb.append("Catatan  : ").append(catatan).append("\n");
+        }
+        sb.append("--------------------------------------------\n");
+
+        for (int r = 0; r < tm.getRowCount(); r++) {
+            Object idProduk = tm.getValueAt(r, 1);
+            Object produk = tm.getValueAt(r, 2);
+            Object harga = tm.getValueAt(r, 3);
+            Object jumlah = tm.getValueAt(r, 4);
+            Object subtotal = tm.getValueAt(r, 5);
+
+            if (produk == null || produk.toString().trim().isEmpty()) {
+                continue;
+            }
+
+            sb.append(idProduk != null ? idProduk : "").append(" - ")
+            .append(produk).append("\n")
+            .append("  Jml: ").append(jumlah != null ? jumlah : 0)
+            .append(" | Harga: ").append(harga != null ? harga : "-")
+            .append(" | Sub: ").append(subtotal != null ? subtotal : "-").append("\n");
+        }
+
+        sb.append("--------------------------------------------\n");
+        sb.append("TOTAL: ").append(totalText);
+
+        javax.swing.JTextArea areaBukti = new javax.swing.JTextArea(sb.toString());
+        areaBukti.setEditable(false);
+        areaBukti.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            new javax.swing.JScrollPane(areaBukti),
+            "Bukti Pembelian",
+            javax.swing.JOptionPane.PLAIN_MESSAGE
+        );
+    }//GEN-LAST:event_btnCetakActionPerformed
+
+    private void btnFinalisasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalisasiActionPerformed
+        // TODO add your handling code here:
+        javax.swing.table.TableModel tm = tblDetail.getModel();
+        boolean adaItem = false;
+        int jumlahItem = 0;
+
+        for (int r = 0; r < tm.getRowCount(); r++) {
+            Object produk = tm.getValueAt(r, 2);
+            Object jumlah = tm.getValueAt(r, 4);
+            if (produk != null && !produk.toString().trim().isEmpty()
+                && jumlah != null && !jumlah.toString().trim().isEmpty()) {
+                adaItem = true;
+                jumlahItem++;
+            }
+        }
+
+        if (!adaItem) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Daftar pembelian masih kosong. Tambahkan item terlebih dahulu.",
+                "Finalisasi Pembelian",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        String supplier = cmbSupplier.getSelectedItem() != null
+        ? cmbSupplier.getSelectedItem().toString()
+        : "-";
+        String totalText = (lblTotal.getText() != null && !lblTotal.getText().trim().isEmpty())
+        ? lblTotal.getText().trim()
+        : "Rp 0";
+
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Finalisasi pembelian dari supplier: " + supplier
+            + "\nJumlah baris item: " + jumlahItem
+            + "\nTotal: " + totalText + "?",
+            "Konfirmasi Finalisasi",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (konfirmasi != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // TODO: simpan transaksi pembelian & update stok ke database lewat Koneksi.java
+
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Pembelian dari " + supplier + " berhasil difinalisasi.\nTotal: " + totalText,
+            "Berhasil",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE
+        );
+
+        // Bersihkan input dan kosongkan baris tabel
+        txtId.setText("");
+        txtAlamat.setText("");
+        spnJumlah.setValue(1);
+        lblTotal.setText("Rp 0");
+
+        if (tm instanceof javax.swing.table.DefaultTableModel dtm) {
+            dtm.setRowCount(0);
+        } else {
+            for (int r = 0; r < tm.getRowCount(); r++) {
+                for (int c = 0; c < tm.getColumnCount(); c++) {
+                    tm.setValueAt(null, r, c);
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+    }//GEN-LAST:event_btnFinalisasiActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PanelPembelian().setVisible(true));
-    }
+    private void btnBatalkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalkanActionPerformed
+        // TODO add your handling code here:
+        int jawab = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Batalkan transaksi pembelian ini? Semua item di daftar akan dihapus.",
+            "Batalkan Transaksi",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+        if (jawab != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        javax.swing.table.TableModel tm = tblDetail.getModel();
+        if (tm instanceof javax.swing.table.DefaultTableModel dtm) {
+            dtm.setRowCount(0);
+        }
+        bersihkanInputPembelian();
+        hitungTotalPembelian();
+    }//GEN-LAST:event_btnBatalkanActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatalkan;
@@ -588,10 +785,11 @@ public class PanelPembelian extends javax.swing.JFrame {
     private javax.swing.JButton btnUbah;
     private javax.swing.JComboBox<String> cmbProduk;
     private javax.swing.JComboBox<String> cmbSupplier;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAdmin;
     private javax.swing.JLabel lblAdministrator;
-    private javax.swing.JLabel lblJudul;
+    private javax.swing.JLabel lblJudul1;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblTagline;
     private javax.swing.JLabel lblTotal;
