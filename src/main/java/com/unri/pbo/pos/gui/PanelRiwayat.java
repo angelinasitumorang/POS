@@ -4,6 +4,7 @@
  */
 package com.unri.pbo.pos.gui;
 import com.unri.pbo.pos.DataToko;
+import java.awt.Container;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -11,8 +12,11 @@ public class PanelRiwayat extends javax.swing.JPanel {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PanelRiwayat.class.getName());
 
+        /** Dipanggil MainFrame setiap halaman Riwayat dibuka. */
     public void refresh() {
-        
+        if (model != null) {
+            tampilkan();
+        }
     }
      
     public PanelRiwayat() {
@@ -455,4 +459,16 @@ public class PanelRiwayat extends javax.swing.JPanel {
     private javax.swing.JTable tblRiwayat;
     private javax.swing.JTextField txtIdTransaksi;
     // End of variables declaration//GEN-END:variables
+
+    private Container getContentPane() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void pack() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void setDefaultCloseOperation(int EXIT_ON_CLOSE) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
