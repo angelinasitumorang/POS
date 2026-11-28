@@ -482,8 +482,26 @@ public class DataToko {
     }
 
     public static void hapusPelanggan(Pelanggan p) {
+        int jumlahTransaksi = hitungTransaksiPelanggan(p.getId());
+        if (jumlahTransaksi > 0) {
+            throw new IllegalStateException("Pelanggan " + p.getId() + " - " + p.getNama()
+                    + " sudah punya " + jumlahTransaksi + " transaksi penjualan, jadi tidak bisa dihapus"
+                    + " agar riwayat penjualan tetap utuh.");
+        }
         jalankan("DELETE FROM pelanggan WHERE id_pelanggan = ?", p.getId());
         pelanggan.remove(p);
+    }
+
+    private static int hitungTransaksiPelanggan(String idPelanggan) {
+        try (Connection c = Koneksi.getConnection();
+                PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM penjualan WHERE id_pelanggan = ?")) {
+            ps.setString(1, idPelanggan);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getInt(1) : 0;
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException(pesanSql(e));
+        }
     }
 
     // =====================================================================
