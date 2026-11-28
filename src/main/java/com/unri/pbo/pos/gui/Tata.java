@@ -37,6 +37,8 @@ final class Tata {
             return;
         }
         java.awt.Component sidebar = halaman.getComponent(0);
+        sidebar.setPreferredSize(new java.awt.Dimension(260, sidebar.getPreferredSize().height));
+        sidebar.setMinimumSize(new java.awt.Dimension(260, sidebar.getMinimumSize().height));
         java.awt.Component konten = halaman.getComponent(1);
         halaman.removeAll();
         halaman.setLayout(new java.awt.BorderLayout());

@@ -13,6 +13,8 @@ final class Navigasi {
     private static final Color HIJAU_MENU = new Color(42, 107, 85);
     private static final Color HIJAU_HOVER = new Color(54, 128, 102);
     private static final Color EMAS = new Color(242, 183, 5);
+    private static final Color MERAH = new Color(192, 57, 43);
+    private static final Color MERAH_HOVER = new Color(220, 80, 65);
 
     private Navigasi() {
     }
@@ -27,7 +29,32 @@ final class Navigasi {
         sambung(aktif, pembelian, "pembelian");
         sambung(aktif, penjualan, "penjualan");
         sambung(aktif, riwayat, "riwayat");
+        gayaKeluar(keluar);
         keluar.addActionListener(e -> MainFrame.instance.keluar());
+    }
+
+    /** Tombol Keluar dibuat jelas: latar merah, teks putih tebal, ukuran cukup besar. */
+    private static void gayaKeluar(JButton tombol) {
+        tombol.setContentAreaFilled(false);
+        tombol.setOpaque(true);
+        tombol.setBorderPainted(false);
+        tombol.setFocusPainted(false);
+        tombol.setBackground(MERAH);
+        tombol.setForeground(Color.WHITE);
+        tombol.setFont(tombol.getFont().deriveFont(Font.BOLD, 13f));
+        tombol.setMargin(new java.awt.Insets(4, 12, 4, 12));
+        tombol.setPreferredSize(new java.awt.Dimension(100, 30));
+        tombol.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                tombol.setBackground(MERAH_HOVER);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                tombol.setBackground(MERAH);
+            }
+        });
     }
 
     private static void sambung(String aktif, JButton tombol, String halaman) {
@@ -39,7 +66,7 @@ final class Navigasi {
         tombol.setFocusPainted(false);
         tombol.setBackground(menuIni ? EMAS : HIJAU_MENU);
         tombol.setForeground(menuIni ? HIJAU_TUA : Color.WHITE);
-        tombol.setFont(tombol.getFont().deriveFont(menuIni ? Font.BOLD : Font.PLAIN));
+        tombol.setFont(tombol.getFont().deriveFont(menuIni ? Font.BOLD : Font.PLAIN, 14f));
         tombol.addActionListener(e -> MainFrame.instance.tampilHalaman(halaman));
         if (!menuIni) {
             tombol.addMouseListener(new MouseAdapter() {
