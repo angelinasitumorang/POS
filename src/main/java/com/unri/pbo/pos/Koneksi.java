@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class Koneksi {
 
     private static final String HOST = "localhost";
-    private static final String PORT = "3306";
+    private static final String PORT = "8111";
     private static final String DATABASE = "aplikasi_pos";
     private static final String USER = "root";
     private static final String PASSWORD = "";

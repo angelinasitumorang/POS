@@ -50,6 +50,12 @@ public class DataToko {
 
     private static String galatDb = null;
 
+    /**
+     * Draf transaksi (pesanan penjualan / pembelian) yang belum disimpan. Selama ada draf, stok di
+     * memori sudah berubah, jadi data produk tidak boleh diubah atau dihapus dulu.
+     */
+    public static final java.util.Set<Object> draftAktif = new java.util.HashSet<>();
+
     private DataToko() {
     }
 
@@ -118,6 +124,18 @@ public class DataToko {
 
     public static String pesanDb() {
         return galatDb;
+    }
+
+    /** Mencoba membaca ulang semua data dari database (dipakai kalau MySQL baru dinyalakan). */
+    public static boolean sambungUlang() {
+        try {
+            muatSemua();
+            galatDb = null;
+            return true;
+        } catch (SQLException | RuntimeException e) {
+            galatDb = e.getMessage() == null ? e.toString() : e.getMessage();
+            return false;
+        }
     }
 
     private static String pesanSql(SQLException e) {

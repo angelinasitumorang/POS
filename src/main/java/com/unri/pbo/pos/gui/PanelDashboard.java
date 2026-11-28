@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelDashboard extends javax.swing.JPanel {
      */
     public PanelDashboard() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -648,89 +665,325 @@ public class PanelDashboard extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN DASHBOARD (membuat pesanan penjualan baru)
+    // =====================================================================
+    private DefaultTableModel model;
+    private final List<Produk> daftarProduk = new ArrayList<>();   // urutan sama dengan isi cmbProduk
+    private Penjualan pesanan;          // pesanan yang sedang dibuat (null kalau belum ada item)
+    private boolean memuat = false;     // true saat combo sedang diisi ulang
+
+    private void siapkan() {
+        Navigasi.pasang("dashboard", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        model = DataToko.buatModel("No", "ID Produk", "Produk", "Harga", "Jumlah", "Subtotal");
+        tblPesanan.setModel(model);
+        tblPesanan.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Bantu.lebarKolom(tblPesanan, 40, 90, 220, 100, 70, 110);
+        cmbJenis.setModel(new DefaultComboBoxModel<>(new String[]{"Umum", "Member"}));
+        txtHarga.setEditable(false);
+        txtStok.setEditable(false);
+
+        txtIdPelanggan.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                cariPelanggan(false);
+            }
+        });
+        btnSimpan.addActionListener(e -> simpan());
+        btnReset.addActionListener(e -> reset());
+        tblPesanan.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                isiDariBaris();
+            }
+        });
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Dashboard dibuka. */
+    public void refresh() {
+        muatProduk();
+        tampilkanPesanan();
+        if (pesanan == null && txtIdPelanggan.getText().trim().isEmpty()) {
+            kosongkanPelanggan();
+        }
+        lblNoPesanan.setText("No. Pesanan: " + (pesanan != null ? pesanan.getIdPenjualan() : DataToko.idPenjualanBerikut()));
+    }
+
+    // ---------------------------- produk ----------------------------
+    private void muatProduk() {
+        memuat = true;
+        try {
+            Object lama = cmbProduk.getSelectedItem();
+            daftarProduk.clear();
+            List<String> label = new ArrayList<>();
+            for (Produk p : DataToko.produk) {
+                daftarProduk.add(p);
+                label.add(DataToko.labelProduk(p));
+            }
+            cmbProduk.setModel(new DefaultComboBoxModel<>(label.toArray(new String[0])));
+            if (lama != null && label.contains(lama.toString())) {
+                cmbProduk.setSelectedItem(lama);
+            }
+        } finally {
+            memuat = false;
+        }
+        tampilkanInfoProduk();
+    }
+
+    private Produk produkTerpilih() {
+        int i = cmbProduk.getSelectedIndex();
+        return (i < 0 || i >= daftarProduk.size()) ? null : daftarProduk.get(i);
+    }
+
+    private void tampilkanInfoProduk() {
+        Produk p = produkTerpilih();
+        txtHarga.setText(p == null ? "" : DataToko.angka(p.getHargaJual()));
+        txtStok.setText(p == null ? "" : String.valueOf(p.getStok()));
+    }
+
+    // ---------------------------- pelanggan ----------------------------
+    private void kosongkanPelanggan() {
+        txtIdPelanggan.setText(DataToko.idPelangganBerikut());
+        txtNamaPelanggan.setText("");
+        txtTelepon.setText("");
+        txtAlamat.setText("");
+        cmbJenis.setSelectedIndex(0);
+    }
+
+    /** Kalau ID yang diketik sudah ada, data pelanggannya diisikan otomatis. */
+    private void cariPelanggan(boolean beriTahu) {
+        String id = txtIdPelanggan.getText().trim();
+        if (id.isEmpty()) {
+            return;
+        }
+        Pelanggan p = DataToko.cariPelanggan(id);
+        if (p != null) {
+            txtIdPelanggan.setText(p.getId());
+            txtNamaPelanggan.setText(p.getNama());
+            txtTelepon.setText(p.getNoTelepon() == null ? "" : p.getNoTelepon());
+            txtAlamat.setText(p.getAlamat() == null ? "" : p.getAlamat());
+            cmbJenis.setSelectedItem(p.getJenisPelanggan());
+        } else if (beriTahu) {
+            DataToko.pesan(this, "ID " + id + " belum terdaftar. Isi data di bawah, pelanggan baru\n"
+                    + "akan otomatis disimpan saat pesanan disimpan.");
+        }
+    }
+
+    /** ketat = true: dipakai saat menyimpan (nama wajib diisi). */
+    private Pelanggan bacaPelanggan(boolean ketat) {
+        String id = txtIdPelanggan.getText().trim();
+        Pelanggan ada = id.isEmpty() ? null : DataToko.cariPelanggan(id);
+        if (ada != null) {
+            return ada;
+        }
+        String nama = txtNamaPelanggan.getText().trim();
+        if (ketat && nama.isEmpty()) {
+            throw new IllegalArgumentException("Nama pelanggan wajib diisi.");
+        }
+        if (id.isEmpty()) {
+            id = ketat ? DataToko.idPelangganBerikut() : "-";
+        }
+        Object jenis = cmbJenis.getSelectedItem();
+        return new Pelanggan(id, nama.isEmpty() ? "-" : nama, txtAlamat.getText().trim(),
+                txtTelepon.getText().trim(), jenis == null ? "Umum" : jenis.toString());
+    }
+
+    // ---------------------------- tabel pesanan ----------------------------
+    private void tampilkanPesanan() {
+        model.setRowCount(0);
+        if (pesanan == null) {
+            lblTotal.setText("Rp 0");
+            return;
+        }
+        int no = 1;
+        for (DetailPenjualan d : pesanan.getDaftarDetail()) {
+            model.addRow(new Object[]{no++, d.getProduk().getIdProduk(), d.getProduk().getNamaProduk(),
+                DataToko.angka(d.getHargaJual()), d.getJumlah(), DataToko.angka(d.getSubtotal())});
+        }
+        lblTotal.setText(DataToko.rp(pesanan.hitungTotal()));
+    }
+
+    private DetailPenjualan detailTerpilih() {
+        int baris = tblPesanan.getSelectedRow();
+        if (pesanan == null || baris < 0 || baris >= pesanan.getDaftarDetail().size()) {
+            return null;
+        }
+        return pesanan.getDaftarDetail().get(baris);
+    }
+
+    private void isiDariBaris() {
+        DetailPenjualan d = detailTerpilih();
+        if (d == null) {
+            return;
+        }
+        int i = daftarProduk.indexOf(d.getProduk());
+        if (i >= 0) {
+            cmbProduk.setSelectedIndex(i);
+        }
+        spnJumlah.setValue(d.getJumlah());
+    }
+
+    private int jumlahDiminta() {
+        Object nilai = spnJumlah.getValue();
+        return (nilai instanceof Number) ? ((Number) nilai).intValue() : 1;
+    }
+
+    private void kosongkanPesanan() {
+        pesanan = null;
+        tblPesanan.clearSelection();
+        spnJumlah.setValue(1);
+        txtCatatan.setText("");
+        tampilkanPesanan();
+    }
+
+    private void setelahPerubahan() {
+        tampilkanPesanan();
+        muatProduk();   // stok di kotak "Stok" ikut diperbarui
+    }
+
+    // ---------------------------- aksi ----------------------------
+    private void simpan() {
+        if (pesanan == null || pesanan.getDaftarDetail().isEmpty()) {
+            DataToko.galat(this, "Belum ada pesanan. Tambahkan produk dulu.");
+            return;
+        }
+        Pelanggan pel;
+        try {
+            pel = bacaPelanggan(true);
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+            return;
+        }
+        if (!DataToko.tanya(this, "Simpan pesanan " + pesanan.getIdPenjualan() + "?\n"
+                + "Pelanggan : " + pel.getNama() + " (" + pel.getId() + ")\n"
+                + "Total     : " + DataToko.rp(pesanan.hitungTotal()))) {
+            return;
+        }
+        Penjualan p = pesanan;
+        try {
+            DataToko.RekamPenjualan r = DataToko.finalisasiPenjualan(p, pel);
+            DataToko.draftAktif.remove(p);
+            kosongkanPesanan();
+            kosongkanPelanggan();
+            refresh();
+            DataToko.tampilTeks(this, "Nota " + r.id + " - tersimpan", DataToko.notaPenjualan(r));
+        } catch (RuntimeException ex) {
+            if (!Bantu.dbHidup()) {
+                DataToko.galat(this, DataToko.pesanGalat(ex) + "\n\nPesanan belum dibuang. Nyalakan MySQL lalu coba lagi.");
+                return;
+            }
+            DataToko.galat(this, DataToko.pesanGalat(ex)
+                    + "\n\nPesanan dibatalkan dan data dimuat ulang dari database.");
+            DataToko.draftAktif.remove(p);
+            pesanan = null;
+            Bantu.muatUlang(this);
+            kosongkanPesanan();
+            refresh();
+        }
+    }
+
+    private void reset() {
+        if (pesanan != null && !pesanan.getDaftarDetail().isEmpty()
+                && !DataToko.tanya(this, "Kosongkan form dan buang pesanan yang belum disimpan?")) {
+            return;
+        }
+        Bantu.buang(pesanan);
+        kosongkanPesanan();
+        kosongkanPelanggan();
+        refresh();
+    }
+
+    // ---- handler bawaan Form Editor ----
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        ubahJumlah();
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void txtIdPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPelangganActionPerformed
-        // TODO add your handling code here:
+        cariPelanggan(true);
     }//GEN-LAST:event_txtIdPelangganActionPerformed
 
     private void cmbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdukActionPerformed
-        // TODO add your handling code here:
+        if (!memuat) {
+            tampilkanInfoProduk();
+        }
     }//GEN-LAST:event_cmbProdukActionPerformed
 
     private void txtStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStokActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtStokActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        // TODO add your handling code here:
+        Produk produk = produkTerpilih();
+        if (produk == null) {
+            DataToko.galat(this, "Belum ada produk. Tambahkan dulu di menu Produk.");
+            return;
+        }
+        String catatan = txtCatatan.getText().trim();
+        try {
+            if (pesanan == null) {
+                // pelanggan sebenarnya dibaca lagi saat pesanan disimpan
+                pesanan = new Penjualan(DataToko.idPenjualanBerikut(), bacaPelanggan(false));
+                DataToko.draftAktif.add(pesanan);
+            }
+            pesanan.tambahPenjualan(produk, jumlahDiminta(), DataToko.ADMIN,
+                    catatan.isEmpty() ? "Penjualan pelanggan" : catatan);
+            spnJumlah.setValue(1);
+            lblNoPesanan.setText("No. Pesanan: " + pesanan.getIdPenjualan());
+            setelahPerubahan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+            if (pesanan != null && pesanan.getDaftarDetail().isEmpty()) {
+                Bantu.buang(pesanan);
+                pesanan = null;
+            }
+        }
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        // TODO add your handling code here:
+        DetailPenjualan d = detailTerpilih();
+        if (d == null) {
+            DataToko.galat(this, "Pilih baris pesanan yang mau dihapus.");
+            return;
+        }
+        if (!DataToko.tanya(this, "Hapus " + d.getProduk().getNamaProduk() + " dari pesanan?")) {
+            return;
+        }
+        try {
+            pesanan.hapusDetail(d.getIdDetailPenjualan(), DataToko.ADMIN, "Dihapus dari pesanan");
+            setelahPerubahan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        ubahJumlah();
+        DetailPenjualan d = detailTerpilih();
+        if (d == null) {
+            DataToko.galat(this, "Pilih baris pesanan yang jumlahnya mau diubah,\nlalu isi Jumlah yang baru.");
+            return;
+        }
+        try {
+            pesanan.ubahDetail(d.getIdDetailPenjualan(), jumlahDiminta(), DataToko.ADMIN, "Koreksi jumlah pesanan");
+            setelahPerubahan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
     }//GEN-LAST:event_btnUbahActionPerformed
 
     private void btnCetakNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakNoteActionPerformed
-        // TODO add your handling code here:
-        if (model.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Belum ada pesanan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        if (pesanan == null || pesanan.getDaftarDetail().isEmpty()) {
+            DataToko.galat(this, "Belum ada pesanan.");
             return;
         }
-
-        String namaPelanggan = txtNamaPelanggan.getText().trim();
-        if (namaPelanggan.isEmpty()) {
-            namaPelanggan = "-";
+        try {
+            DataToko.RekamPenjualan r = DataToko.rekamDraft(pesanan, bacaPelanggan(false));
+            DataToko.tampilTeks(this, "Nota " + r.id + " (belum disimpan)", DataToko.notaPenjualan(r));
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
         }
-
-        String jenisPelanggan = cmbJenis.getSelectedItem() != null
-        ? cmbJenis.getSelectedItem().toString()
-        : "-";
-
-        String catatan = txtCatatan.getText().trim();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== KHASKITA - NOTA PESANAN ===\n");
-        sb.append("No. Pesanan : ").append(idPesanan).append("\n");
-        sb.append("Pelanggan   : ").append(namaPelanggan).append(" (").append(jenisPelanggan).append(")\n");
-        if (!catatan.isEmpty()) {
-            sb.append("Catatan     : ").append(catatan).append("\n");
-        }
-        sb.append("--------------------------------\n");
-
-        for (int r = 0; r < model.getRowCount(); r++) {
-            String produk = String.valueOf(model.getValueAt(r, 2));
-            int jumlah = Integer.parseInt(String.valueOf(model.getValueAt(r, 4)));
-            int harga = Integer.parseInt(String.valueOf(model.getValueAt(r, 3)));
-            int subtotal = Integer.parseInt(String.valueOf(model.getValueAt(r, 5)));
-
-            sb.append(produk).append("\n")
-            .append("  ").append(jumlah).append(" x Rp ").append(rp.format(harga))
-            .append(" = Rp ").append(rp.format(subtotal)).append("\n");
-        }
-
-        sb.append("--------------------------------\n");
-        sb.append("TOTAL: ").append(lblTotal.getText());
-
-        javax.swing.JTextArea areaNota = new javax.swing.JTextArea(sb.toString());
-        areaNota.setEditable(false);
-        areaNota.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-
-        JOptionPane.showMessageDialog(
-            this,
-            new javax.swing.JScrollPane(areaNota),
-            "Nota " + idPesanan,
-            JOptionPane.PLAIN_MESSAGE
-        );
     }//GEN-LAST:event_btnCetakNoteActionPerformed
 
 

@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelPelanggan extends javax.swing.JPanel {
      */
     public PanelPelanggan() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -502,33 +519,166 @@ public class PanelPelanggan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN PELANGGAN
+    // =====================================================================
+    private DefaultTableModel model;
+    private final List<Pelanggan> tampil = new ArrayList<>();
+
+    private void siapkan() {
+        Navigasi.pasang("pelanggan", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        model = DataToko.buatModel("No", "ID Pelanggan", "Nama", "Alamat", "No Telepon", "Jenis");
+        tblPelanggan.setModel(model);
+        tblPelanggan.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Bantu.lebarKolom(tblPelanggan, 40, 90, 160, 200, 110, 80);
+        cmbJenis.setModel(new DefaultComboBoxModel<>(new String[]{"Umum", "Member"}));
+        txtId.setEditable(false);
+        txtCari.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Nama / ID Pelanggan"));
+
+        btnSimpan.addActionListener(e -> simpan());
+        btnUbah.addActionListener(e -> ubah());
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                tampilkanData();
+            }
+        });
+        tblPelanggan.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                isiForm();
+            }
+        });
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Pelanggan dibuka. */
+    public void refresh() {
+        tampilkanData();
+        bersihkan();
+    }
+
+    private void tampilkanData() {
+        String kata = txtCari.getText().trim().toLowerCase();
+        model.setRowCount(0);
+        tampil.clear();
+        int no = 1;
+        for (Pelanggan p : DataToko.pelanggan) {
+            if (kata.isEmpty() || p.getNama().toLowerCase().contains(kata)
+                    || p.getId().toLowerCase().contains(kata)) {
+                tampil.add(p);
+                model.addRow(new Object[]{no++, p.getId(), p.getNama(), p.getAlamat(),
+                    p.getNoTelepon(), p.getJenisPelanggan()});
+            }
+        }
+    }
+
+    private void isiForm() {
+        int baris = tblPelanggan.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            return;
+        }
+        Pelanggan p = tampil.get(baris);
+        txtId.setText(p.getId());
+        txtNama.setText(p.getNama());
+        txtAlamat.setText(p.getAlamat());
+        txtTelepon.setText(p.getNoTelepon());
+        cmbJenis.setSelectedItem(p.getJenisPelanggan());
+    }
+
+    private void bersihkan() {
+        tblPelanggan.clearSelection();
+        txtId.setText(DataToko.idPelangganBerikut());
+        txtNama.setText("");
+        txtAlamat.setText("");
+        txtTelepon.setText("");
+        cmbJenis.setSelectedIndex(0);
+        txtNama.requestFocusInWindow();
+    }
+
+    private String jenisTerpilih() {
+        Object j = cmbJenis.getSelectedItem();
+        return j == null ? "Umum" : j.toString();
+    }
+
+    private void simpan() {
+        try {
+            String nama = Bantu.wajib(txtNama.getText(), "Nama pelanggan");
+            String id = txtId.getText().trim();
+            if (id.isEmpty() || DataToko.cariPelanggan(id) != null) {
+                id = DataToko.idPelangganBerikut();   // ID lama sudah dipakai, buat ID baru
+            }
+            DataToko.tambahPelanggan(new Pelanggan(id, nama, txtAlamat.getText().trim(),
+                    txtTelepon.getText().trim(), jenisTerpilih()));
+            DataToko.pesan(this, "Pelanggan " + id + " berhasil disimpan.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    private void ubah() {
+        int baris = tblPelanggan.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            DataToko.galat(this, "Pilih pelanggan di tabel yang mau diubah.");
+            return;
+        }
+        try {
+            Pelanggan p = tampil.get(baris);
+            String nama = Bantu.wajib(txtNama.getText(), "Nama pelanggan");
+            DataToko.ubahPelanggan(p, nama, txtAlamat.getText().trim(), txtTelepon.getText().trim(),
+                    jenisTerpilih());
+            DataToko.pesan(this, "Pelanggan " + p.getId() + " berhasil diubah.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    // ---- handler bawaan Form Editor ----
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
-    private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBersihActionPerformed
-
     private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
-        // TODO add your handling code here:
+        txtAlamat.requestFocusInWindow();
     }//GEN-LAST:event_txtNamaActionPerformed
 
-    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHapusActionPerformed
+    private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
+        bersihkan();
+    }//GEN-LAST:event_btnBersihActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
+        tampilkanData();
     }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        int baris = tblPelanggan.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            DataToko.galat(this, "Pilih pelanggan di tabel yang mau dihapus.");
+            return;
+        }
+        Pelanggan p = tampil.get(baris);
+        if (!DataToko.tanya(this, "Hapus pelanggan " + p.getId() + " - " + p.getNama() + "?")) {
+            return;
+        }
+        try {
+            DataToko.hapusPelanggan(p);
+            DataToko.pesan(this, "Pelanggan berhasil dihapus.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

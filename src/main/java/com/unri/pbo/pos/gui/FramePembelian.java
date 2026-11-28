@@ -35,6 +35,30 @@ public class FramePembelian extends javax.swing.JFrame {
         } catch (Exception e) {
             return 1;
         }
+    }
+
+    /** Mengosongkan kotak isian pembelian. */
+    private void bersihkanInputPembelian() {
+        txtId.setText("");
+        txtAlamat.setText("");
+        spnJumlah.setValue(1);
+    }
+
+    /** Menghitung ulang total dari kolom Subtotal (kolom ke-6) di tabel. */
+    private void hitungTotalPembelian() {
+        long total = 0;
+        javax.swing.table.TableModel tm = tblDetail.getModel();
+        for (int r = 0; r < tm.getRowCount(); r++) {
+            Object sub = tm.getValueAt(r, 5);
+            if (sub != null) {
+                String digit = sub.toString().replaceAll("[^0-9]", "");
+                if (!digit.isEmpty()) {
+                    total += Long.parseLong(digit);
+                }
+            }
+        }
+        lblTotal.setText("Rp " + rpPembelian.format(total));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

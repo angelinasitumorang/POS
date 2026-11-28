@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelRiwayat extends javax.swing.JPanel {
      */
     public PanelRiwayat() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -376,20 +393,58 @@ public class PanelRiwayat extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN RIWAYAT
+    // =====================================================================
+    private DefaultTableModel model;
+
+    private void siapkan() {
+        Navigasi.pasang("riwayat", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        model = DataToko.buatModel("No", "Waktu", "Jenis", "ID Transaksi", "Aksi", "Detail",
+                "Lama", "Baru", "Admin", "Alasan");
+        tblRiwayat.setModel(model);
+        Bantu.lebarKolom(tblRiwayat, 35, 120, 80, 90, 120, 230, 50, 50, 70, 200);
+        cmbJenis.setModel(new DefaultComboBoxModel<>(new String[]{"Semua", "Penjualan", "Pembelian"}));
+        cmbJenis.addActionListener(e -> tampilkan());
+        txtIdTransaksi.addActionListener(e -> tampilkan());
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Riwayat dibuka. */
+    public void refresh() {
+        tampilkan();
+    }
+
+    private void tampilkan() {
+        if (model == null) {
+            return;
+        }
+        model.setRowCount(0);
+        try {
+            int no = 1;
+            for (String[] b : DataToko.ambilRiwayat(String.valueOf(cmbJenis.getSelectedItem()),
+                    txtIdTransaksi.getText())) {
+                model.addRow(new Object[]{no++, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]});
+            }
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    // ---- handler bawaan Form Editor ----
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void btnTampilkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTampilkanActionPerformed
-        // TODO add your handling code here:
+        tampilkan();
     }//GEN-LAST:event_btnTampilkanActionPerformed
 
 

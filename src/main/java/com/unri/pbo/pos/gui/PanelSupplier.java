@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelSupplier extends javax.swing.JPanel {
      */
     public PanelSupplier() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -500,33 +517,168 @@ public class PanelSupplier extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN SUPPLIER
+    // =====================================================================
+    private DefaultTableModel model;
+    private final List<Supplier> tampil = new ArrayList<>();
+
+    private void siapkan() {
+        Navigasi.pasang("supplier", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        lblJudul.setText("Data Supplier");
+        txtCari.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Nama / ID / Perusahaan"));
+        model = DataToko.buatModel("No", "ID Supplier", "Nama", "Alamat", "No Telepon", "Perusahaan");
+        tblSupplier.setModel(model);
+        tblSupplier.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Bantu.lebarKolom(tblSupplier, 40, 90, 140, 180, 110, 150);
+        txtId.setEditable(false);
+
+        btnSimpan.addActionListener(e -> simpan());
+        btnUbah.addActionListener(e -> ubah());
+        btnHapus.addActionListener(e -> hapus());
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                tampilkanData();
+            }
+        });
+        tblSupplier.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                isiForm();
+            }
+        });
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Supplier dibuka. */
+    public void refresh() {
+        tampilkanData();
+        bersihkan();
+    }
+
+    private void tampilkanData() {
+        String kata = txtCari.getText().trim().toLowerCase();
+        model.setRowCount(0);
+        tampil.clear();
+        int no = 1;
+        for (Supplier s : DataToko.supplier) {
+            if (kata.isEmpty() || s.getNama().toLowerCase().contains(kata)
+                    || s.getId().toLowerCase().contains(kata)
+                    || s.getNamaPerusahaan().toLowerCase().contains(kata)) {
+                tampil.add(s);
+                model.addRow(new Object[]{no++, s.getId(), s.getNama(), s.getAlamat(),
+                    s.getNoTelepon(), s.getNamaPerusahaan()});
+            }
+        }
+    }
+
+    private void isiForm() {
+        int baris = tblSupplier.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            return;
+        }
+        Supplier s = tampil.get(baris);
+        txtId.setText(s.getId());
+        txtNama.setText(s.getNama());
+        txtAlamat.setText(s.getAlamat());
+        txtTelepon.setText(s.getNoTelepon());
+        txtPerusahaan.setText(s.getNamaPerusahaan());
+    }
+
+    private void bersihkan() {
+        tblSupplier.clearSelection();
+        txtId.setText(DataToko.idSupplierBerikut());
+        txtNama.setText("");
+        txtAlamat.setText("");
+        txtTelepon.setText("");
+        txtPerusahaan.setText("");
+        txtNama.requestFocusInWindow();
+    }
+
+    private void simpan() {
+        try {
+            String nama = Bantu.wajib(txtNama.getText(), "Nama supplier");
+            String perusahaan = Bantu.wajib(txtPerusahaan.getText(), "Nama perusahaan");
+            String id = txtId.getText().trim();
+            if (id.isEmpty() || DataToko.cariSupplier(id) != null) {
+                id = DataToko.idSupplierBerikut();   // ID lama sudah dipakai, buat ID baru
+            }
+            DataToko.tambahSupplier(new Supplier(id, nama, txtAlamat.getText().trim(),
+                    txtTelepon.getText().trim(), perusahaan));
+            DataToko.pesan(this, "Supplier " + id + " berhasil disimpan.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    private void ubah() {
+        int baris = tblSupplier.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            DataToko.galat(this, "Pilih supplier di tabel yang mau diubah.");
+            return;
+        }
+        try {
+            Supplier s = tampil.get(baris);
+            String nama = Bantu.wajib(txtNama.getText(), "Nama supplier");
+            String perusahaan = Bantu.wajib(txtPerusahaan.getText(), "Nama perusahaan");
+            DataToko.ubahSupplier(s, nama, txtAlamat.getText().trim(), txtTelepon.getText().trim(), perusahaan);
+            DataToko.pesan(this, "Supplier " + s.getId() + " berhasil diubah.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    private void hapus() {
+        int baris = tblSupplier.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            DataToko.galat(this, "Pilih supplier di tabel yang mau dihapus.");
+            return;
+        }
+        Supplier s = tampil.get(baris);
+        if (!DataToko.tanya(this, "Hapus supplier " + s.getId() + " - " + s.getNamaPerusahaan() + "?")) {
+            return;
+        }
+        try {
+            DataToko.hapusSupplier(s);
+            DataToko.pesan(this, "Supplier berhasil dihapus.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    // ---- handler bawaan Form Editor ----
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
-        // TODO add your handling code here:
+        txtAlamat.requestFocusInWindow();
     }//GEN-LAST:event_txtNamaActionPerformed
 
     private void btnBersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersihActionPerformed
-        // TODO add your handling code here:
+        bersihkan();
     }//GEN-LAST:event_btnBersihActionPerformed
 
-    private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCariActionPerformed
-
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
+        tampilkanData();
     }//GEN-LAST:event_btnCariActionPerformed
+
+    private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
+        tampilkanData();
+    }//GEN-LAST:event_txtCariActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

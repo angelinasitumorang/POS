@@ -7,28 +7,65 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Jar lib/ProjectPOS.jar dikompilasi dengan Java 26, jadi gunakan JDK 26 -->
         <maven.compiler.release>26</maven.compiler.release>
         <exec.mainClass>com.unri.pbo.pos.POS</exec.mainClass>
     </properties>
 
     <dependencies>
-        <!-- Dependency untuk MySQL Connector -->
+        <!-- Driver MySQL (XAMPP) -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
 
-        <!-- Dependency untuk File JAR Lokal -->
+        <!-- Jar lokal berisi class model (Produk, Pelanggan, Penjualan, dst).
+             Dipasang otomatis ke repository Maven lokal oleh plugin di bawah (fase initialize). -->
         <dependency>
             <groupId>com.unri.pbo</groupId>
             <artifactId>ProjectPOS</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.netbeans.external</groupId>
-            <artifactId>AbsoluteLayout</artifactId>
-            <version>RELEASE270</version>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>pasang-ProjectPOS</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.basedir}/lib/ProjectPOS.jar</file>
+                            <groupId>com.unri.pbo</groupId>
+                            <artifactId>ProjectPOS</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Supaya "mvn package" menghasilkan jar yang bisa dijalankan -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.unri.pbo.pos.POS</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

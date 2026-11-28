@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelPembelian extends javax.swing.JPanel {
      */
     public PanelPembelian() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -563,208 +580,322 @@ public class PanelPembelian extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN PEMBELIAN (restock dari supplier)
+    // =====================================================================
+    private DefaultTableModel model;
+    private final List<Produk> daftarProduk = new ArrayList<>();       // urutan sama dengan cmbProduk
+    private final List<Supplier> daftarSupplier = new ArrayList<>();   // urutan sama dengan cmbSupplier
+    private Pembelian pembelian;        // pembelian yang sedang dibuat (null kalau belum ada item)
+    private boolean memuat = false;     // true saat combo sedang diisi ulang
+
+    private void siapkan() {
+        Navigasi.pasang("pembelian", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        lblJudul1.setText("Form Pembelian dari Supplier");
+        model = DataToko.buatModel("No", "ID Produk", "Produk", "Harga Beli", "Jumlah", "Subtotal");
+        tblDetail.setModel(model);
+        tblDetail.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Bantu.lebarKolom(tblDetail, 40, 90, 220, 100, 70, 110);
+        txtId.setEditable(false);   // kotak "Harga Beli": diambil dari data produk
+
+        btnHapus.addActionListener(e -> hapusItem());
+        tblDetail.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                isiDariBaris();
+            }
+        });
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Pembelian dibuka. */
+    public void refresh() {
+        memuat = true;
+        try {
+            daftarSupplier.clear();
+            List<String> labelSup = new ArrayList<>();
+            for (Supplier s : DataToko.supplier) {
+                daftarSupplier.add(s);
+                labelSup.add(DataToko.labelSupplier(s));
+            }
+            Bantu.isiCombo(cmbSupplier, labelSup);
+
+            daftarProduk.clear();
+            List<String> labelProduk = new ArrayList<>();
+            for (Produk p : DataToko.produk) {
+                daftarProduk.add(p);
+                labelProduk.add(DataToko.labelProduk(p));
+            }
+            Bantu.isiCombo(cmbProduk, labelProduk);
+        } finally {
+            memuat = false;
+        }
+        tampilkanInfoProduk();
+        tampilkanDetail();
+    }
+
+    private Produk produkTerpilih() {
+        int i = cmbProduk.getSelectedIndex();
+        return (i < 0 || i >= daftarProduk.size()) ? null : daftarProduk.get(i);
+    }
+
+    private Supplier supplierTerpilih() {
+        int i = cmbSupplier.getSelectedIndex();
+        return (i < 0 || i >= daftarSupplier.size()) ? null : daftarSupplier.get(i);
+    }
+
+    private void tampilkanInfoProduk() {
+        Produk p = produkTerpilih();
+        txtId.setText(p == null ? "" : DataToko.angka(p.getHargaBeli()));
+    }
+
+    private void tampilkanDetail() {
+        model.setRowCount(0);
+        if (pembelian == null) {
+            lblTotal.setText("Rp 0");
+            return;
+        }
+        int no = 1;
+        for (DetailPembelian d : pembelian.getDaftarDetail()) {
+            model.addRow(new Object[]{no++, d.getProduk().getIdProduk(), d.getProduk().getNamaProduk(),
+                DataToko.angka(d.getHargaBeli()), d.getJumlah(), DataToko.angka(d.getSubtotal())});
+        }
+        lblTotal.setText(DataToko.rp(pembelian.hitungTotal()));
+    }
+
+    private DetailPembelian detailTerpilih() {
+        int baris = tblDetail.getSelectedRow();
+        if (pembelian == null || baris < 0 || baris >= pembelian.getDaftarDetail().size()) {
+            return null;
+        }
+        return pembelian.getDaftarDetail().get(baris);
+    }
+
+    private void isiDariBaris() {
+        DetailPembelian d = detailTerpilih();
+        if (d == null) {
+            return;
+        }
+        int i = daftarProduk.indexOf(d.getProduk());
+        if (i >= 0) {
+            cmbProduk.setSelectedIndex(i);
+        }
+        spnJumlah.setValue(d.getJumlah());
+    }
+
+    private int jumlahDiminta() {
+        Object nilai = spnJumlah.getValue();
+        return (nilai instanceof Number) ? ((Number) nilai).intValue() : 1;
+    }
+
+    private String catatan(String cadangan) {
+        String c = txtAlamat.getText().trim();
+        return c.isEmpty() ? cadangan : c;
+    }
+
+    private void kosongkanForm() {
+        pembelian = null;
+        tblDetail.clearSelection();
+        spnJumlah.setValue(1);
+        txtAlamat.setText("");
+        tampilkanDetail();
+    }
+
+    private void hapusItem() {
+        DetailPembelian d = detailTerpilih();
+        if (d == null) {
+            DataToko.galat(this, "Pilih baris item yang mau dihapus.");
+            return;
+        }
+        if (!DataToko.tanya(this, "Hapus " + d.getProduk().getNamaProduk() + " dari pembelian?")) {
+            return;
+        }
+        try {
+            pembelian.hapusDetail(d.getIdDetailPembelian(), DataToko.ADMIN, "Dihapus dari pembelian");
+            tampilkanDetail();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    /** Membatalkan pembelian yang SUDAH selesai (stok dikurangi lagi). */
+    private void batalkanYangSudahSelesai() {
+        List<DataToko.RekamPembelian> selesai = new ArrayList<>();
+        for (int i = DataToko.pembelian.size() - 1; i >= 0; i--) {
+            if ("Selesai".equals(DataToko.pembelian.get(i).status)) {
+                selesai.add(DataToko.pembelian.get(i));
+            }
+        }
+        if (selesai.isEmpty()) {
+            DataToko.pesan(this, "Tidak ada pembelian yang sedang dibuat,\n"
+                    + "dan belum ada pembelian selesai yang bisa dibatalkan.");
+            return;
+        }
+        String[] pilihan = new String[selesai.size()];
+        for (int i = 0; i < pilihan.length; i++) {
+            DataToko.RekamPembelian r = selesai.get(i);
+            pilihan[i] = r.id + " | " + DataToko.tanggal(r.tanggal) + " | "
+                    + r.supplier.getNamaPerusahaan() + " | " + DataToko.rp(r.total);
+        }
+        Object dipilih = JOptionPane.showInputDialog(this,
+                "Tidak ada pembelian yang sedang dibuat.\nPilih pembelian selesai yang mau dibatalkan:",
+                "Batalkan Pembelian", JOptionPane.QUESTION_MESSAGE, null, pilihan, pilihan[0]);
+        if (dipilih == null) {
+            return;
+        }
+        DataToko.RekamPembelian r = null;
+        for (int i = 0; i < pilihan.length; i++) {
+            if (pilihan[i].equals(dipilih)) {
+                r = selesai.get(i);
+            }
+        }
+        if (r == null) {
+            return;
+        }
+        String alasan = Bantu.minta(this, "Batalkan Pembelian",
+                "Alasan membatalkan pembelian " + r.id + " (wajib diisi):");
+        if (alasan == null) {
+            DataToko.galat(this, "Pembatalan dibatalkan: alasan wajib diisi.");
+            return;
+        }
+        try {
+            DataToko.batalkanPembelian(r, alasan);
+            DataToko.pesan(this, "Pembelian " + r.id + " dibatalkan dan stok sudah dikurangi kembali.");
+            refresh();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    // ---- handler bawaan Form Editor ----
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
-        // TODO add your handling code here:
-        Object terpilih = cmbSupplier.getSelectedItem();
-        if (terpilih != null) {
-        }
     }//GEN-LAST:event_cmbSupplierActionPerformed
 
     private void cmbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdukActionPerformed
-        // TODO add your handling code here:
-        Object produkTerpilih = cmbProduk.getSelectedItem();
-        if (produkTerpilih != null) {
+        if (!memuat) {
+            tampilkanInfoProduk();
         }
     }//GEN-LAST:event_cmbProdukActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        // TODO add your handling code here:
+        Supplier sup = supplierTerpilih();
+        if (sup == null) {
+            DataToko.galat(this, "Belum ada supplier. Tambahkan dulu di menu Supplier.");
+            return;
+        }
+        Produk produk = produkTerpilih();
+        if (produk == null) {
+            DataToko.galat(this, "Belum ada produk. Tambahkan dulu di menu Produk.");
+            return;
+        }
+        try {
+            if (pembelian == null) {
+                pembelian = new Pembelian(DataToko.idPembelianBerikut(), sup);
+                DataToko.draftAktif.add(pembelian);
+            }
+            pembelian.tambahPembelian(produk, jumlahDiminta(), DataToko.ADMIN, catatan("Restock barang"));
+            spnJumlah.setValue(1);
+            tampilkanDetail();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+            if (pembelian != null && pembelian.getDaftarDetail().isEmpty()) {
+                Bantu.buang(pembelian);
+                pembelian = null;
+            }
+        }
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        // TODO add your handling code here:
+        DetailPembelian d = detailTerpilih();
+        if (d == null) {
+            DataToko.galat(this, "Pilih baris item yang jumlahnya mau diubah,\nlalu isi Jumlah yang baru.");
+            return;
+        }
+        try {
+            pembelian.ubahDetail(d.getIdDetailPembelian(), jumlahDiminta(), DataToko.ADMIN,
+                    catatan("Koreksi jumlah pembelian"));
+            tampilkanDetail();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
     }//GEN-LAST:event_btnUbahActionPerformed
 
     private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCetakActionPerformed
-        // TODO add your handling code here:
-        javax.swing.table.TableModel tm = tblDetail.getModel();
-        boolean adaIsi = false;
-
-        for (int r = 0; r < tm.getRowCount(); r++) {
-            Object produk = tm.getValueAt(r, 2);
-            Object jumlah = tm.getValueAt(r, 4);
-            if (produk != null && !produk.toString().trim().isEmpty()
-                && jumlah != null && !jumlah.toString().trim().isEmpty()) {
-                adaIsi = true;
-                break;
-            }
-        }
-
-        if (!adaIsi) {
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Belum ada item pembelian di daftar.",
-                "Cek Bukti",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE
-            );
+        if (pembelian == null || pembelian.getDaftarDetail().isEmpty()) {
+            DataToko.galat(this, "Belum ada item pembelian di daftar.");
             return;
         }
-
-        String supplier = cmbSupplier.getSelectedItem() != null
-        ? cmbSupplier.getSelectedItem().toString()
-        : "-";
-        String catatan = txtAlamat.getText().trim();
-        String totalText = lblTotal.getText() != null && !lblTotal.getText().trim().isEmpty()
-        ? lblTotal.getText().trim()
-        : "-";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== KHASKITA - BUKTI PEMBELIAN (RESTOCK) ===\n");
-        sb.append("Supplier : ").append(supplier).append("\n");
-        if (!catatan.isEmpty()) {
-            sb.append("Catatan  : ").append(catatan).append("\n");
+        Supplier sup = supplierTerpilih();
+        if (sup == null) {
+            DataToko.galat(this, "Pilih supplier dulu.");
+            return;
         }
-        sb.append("--------------------------------------------\n");
-
-        for (int r = 0; r < tm.getRowCount(); r++) {
-            Object idProduk = tm.getValueAt(r, 1);
-            Object produk = tm.getValueAt(r, 2);
-            Object harga = tm.getValueAt(r, 3);
-            Object jumlah = tm.getValueAt(r, 4);
-            Object subtotal = tm.getValueAt(r, 5);
-
-            if (produk == null || produk.toString().trim().isEmpty()) {
-                continue;
-            }
-
-            sb.append(idProduk != null ? idProduk : "").append(" - ")
-            .append(produk).append("\n")
-            .append("  Jml: ").append(jumlah != null ? jumlah : 0)
-            .append(" | Harga: ").append(harga != null ? harga : "-")
-            .append(" | Sub: ").append(subtotal != null ? subtotal : "-").append("\n");
-        }
-
-        sb.append("--------------------------------------------\n");
-        sb.append("TOTAL: ").append(totalText);
-
-        javax.swing.JTextArea areaBukti = new javax.swing.JTextArea(sb.toString());
-        areaBukti.setEditable(false);
-        areaBukti.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            new javax.swing.JScrollPane(areaBukti),
-            "Bukti Pembelian",
-            javax.swing.JOptionPane.PLAIN_MESSAGE
-        );
+        DataToko.RekamPembelian r = DataToko.rekamDraft(pembelian, sup);
+        DataToko.tampilTeks(this, "Bukti " + r.id + " (belum disimpan)", DataToko.buktiPembelian(r));
     }//GEN-LAST:event_btnCetakActionPerformed
 
     private void btnFinalisasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalisasiActionPerformed
-        // TODO add your handling code here:
-        javax.swing.table.TableModel tm = tblDetail.getModel();
-        boolean adaItem = false;
-        int jumlahItem = 0;
-
-        for (int r = 0; r < tm.getRowCount(); r++) {
-            Object produk = tm.getValueAt(r, 2);
-            Object jumlah = tm.getValueAt(r, 4);
-            if (produk != null && !produk.toString().trim().isEmpty()
-                && jumlah != null && !jumlah.toString().trim().isEmpty()) {
-                adaItem = true;
-                jumlahItem++;
-            }
-        }
-
-        if (!adaItem) {
-            javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Daftar pembelian masih kosong. Tambahkan item terlebih dahulu.",
-                "Finalisasi Pembelian",
-                javax.swing.JOptionPane.WARNING_MESSAGE
-            );
+        if (pembelian == null || pembelian.getDaftarDetail().isEmpty()) {
+            DataToko.galat(this, "Daftar pembelian masih kosong. Tambahkan item terlebih dahulu.");
             return;
         }
-
-        String supplier = cmbSupplier.getSelectedItem() != null
-        ? cmbSupplier.getSelectedItem().toString()
-        : "-";
-        String totalText = (lblTotal.getText() != null && !lblTotal.getText().trim().isEmpty())
-        ? lblTotal.getText().trim()
-        : "Rp 0";
-
-        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Finalisasi pembelian dari supplier: " + supplier
-            + "\nJumlah baris item: " + jumlahItem
-            + "\nTotal: " + totalText + "?",
-            "Konfirmasi Finalisasi",
-            javax.swing.JOptionPane.YES_NO_OPTION
-        );
-
-        if (konfirmasi != javax.swing.JOptionPane.YES_OPTION) {
+        Supplier sup = supplierTerpilih();
+        if (sup == null) {
+            DataToko.galat(this, "Pilih supplier dulu.");
             return;
         }
-
-        // TODO: simpan transaksi pembelian & update stok ke database lewat Koneksi.java
-
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Pembelian dari " + supplier + " berhasil difinalisasi.\nTotal: " + totalText,
-            "Berhasil",
-            javax.swing.JOptionPane.INFORMATION_MESSAGE
-        );
-
-        // Bersihkan input dan kosongkan baris tabel
-        txtId.setText("");
-        txtAlamat.setText("");
-        spnJumlah.setValue(1);
-        lblTotal.setText("Rp 0");
-
-        if (tm instanceof javax.swing.table.DefaultTableModel dtm) {
-            dtm.setRowCount(0);
-        } else {
-            for (int r = 0; r < tm.getRowCount(); r++) {
-                for (int c = 0; c < tm.getColumnCount(); c++) {
-                    tm.setValueAt(null, r, c);
-                }
+        if (!DataToko.tanya(this, "Finalisasi pembelian " + pembelian.getIdPembelian() + "?\n"
+                + "Supplier : " + DataToko.labelSupplier(sup) + "\n"
+                + "Jumlah baris : " + pembelian.getDaftarDetail().size() + "\n"
+                + "Total    : " + DataToko.rp(pembelian.hitungTotal()))) {
+            return;
+        }
+        Pembelian p = pembelian;
+        try {
+            DataToko.RekamPembelian r = DataToko.finalisasiPembelian(p, sup);
+            DataToko.draftAktif.remove(p);
+            kosongkanForm();
+            refresh();
+            DataToko.tampilTeks(this, "Bukti " + r.id + " - tersimpan", DataToko.buktiPembelian(r));
+        } catch (RuntimeException ex) {
+            if (!Bantu.dbHidup()) {
+                DataToko.galat(this, DataToko.pesanGalat(ex) + "\n\nPembelian belum dibuang. Nyalakan MySQL lalu coba lagi.");
+                return;
             }
+            DataToko.galat(this, DataToko.pesanGalat(ex)
+                    + "\n\nPembelian dibatalkan dan data dimuat ulang dari database.");
+            DataToko.draftAktif.remove(p);
+            pembelian = null;
+            Bantu.muatUlang(this);
+            kosongkanForm();
+            refresh();
         }
     }//GEN-LAST:event_btnFinalisasiActionPerformed
 
     private void btnBatalkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalkanActionPerformed
-        // TODO add your handling code here:
-        int jawab = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Batalkan transaksi pembelian ini? Semua item di daftar akan dihapus.",
-            "Batalkan Transaksi",
-            javax.swing.JOptionPane.YES_NO_OPTION
-        );
-        if (jawab != javax.swing.JOptionPane.YES_OPTION) {
+        if (pembelian == null || pembelian.getDaftarDetail().isEmpty()) {
+            batalkanYangSudahSelesai();
             return;
         }
-
-        javax.swing.table.TableModel tm = tblDetail.getModel();
-        if (tm instanceof javax.swing.table.DefaultTableModel dtm) {
-            dtm.setRowCount(0);
+        if (!DataToko.tanya(this, "Batalkan pembelian yang sedang dibuat? Semua item di daftar akan dibuang.")) {
+            return;
         }
-        bersihkanInputPembelian();
-        hitungTotalPembelian();
+        Bantu.buang(pembelian);
+        kosongkanForm();
+        refresh();
     }//GEN-LAST:event_btnBatalkanActionPerformed
 
 

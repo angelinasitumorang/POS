@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelProduk extends javax.swing.JPanel {
      */
     public PanelProduk() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -382,13 +399,16 @@ public class PanelProduk extends javax.swing.JPanel {
             pnlForm1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlForm1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(pnlForm1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIdProduk1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNamaProduk1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHargaBeli1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHargaJual1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtStok1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGroup(pnlForm1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlForm1Layout.createSequentialGroup()
+                        .addGroup(pnlForm1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtHargaBeli1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtHargaJual1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtStok1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 16, Short.MAX_VALUE))
+                    .addComponent(txtIdProduk1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtNamaProduk1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(pnlForm1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlForm1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnHapus1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -495,33 +515,194 @@ public class PanelProduk extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN PRODUK
+    // =====================================================================
+    private DefaultTableModel model;
+    private final List<Produk> tampil = new ArrayList<>();   // isi tabel, urutannya sama dengan baris
+
+    private void siapkan() {
+        Navigasi.pasang("produk", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        model = DataToko.buatModel("No", "ID Produk", "Nama Produk", "Harga Beli", "Harga Jual", "Stok");
+        tblProduk.setModel(model);
+        tblProduk.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Bantu.lebarKolom(tblProduk, 40, 90, 240, 100, 100, 60);
+        txtIdProduk1.setEditable(false);
+
+        btnSimpan1.addActionListener(e -> simpan());
+        btnUbah1.addActionListener(e -> ubah());
+        btnHapus1.addActionListener(e -> hapus());
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                tampilkanData();
+            }
+        });
+        tblProduk.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                isiForm();
+            }
+        });
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Produk dibuka. */
+    public void refresh() {
+        tampilkanData();
+        bersihkan();
+    }
+
+    private void tampilkanData() {
+        String kata = txtCari.getText().trim().toLowerCase();
+        model.setRowCount(0);
+        tampil.clear();
+        int no = 1;
+        for (Produk p : DataToko.produk) {
+            if (kata.isEmpty() || p.getNamaProduk().toLowerCase().contains(kata)
+                    || p.getIdProduk().toLowerCase().contains(kata)) {
+                tampil.add(p);
+                model.addRow(new Object[]{no++, p.getIdProduk(), p.getNamaProduk(),
+                    DataToko.angka(p.getHargaBeli()), DataToko.angka(p.getHargaJual()), p.getStok()});
+            }
+        }
+    }
+
+    private void isiForm() {
+        int baris = tblProduk.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            return;
+        }
+        Produk p = tampil.get(baris);
+        txtIdProduk1.setText(p.getIdProduk());
+        txtNamaProduk1.setText(p.getNamaProduk());
+        txtHargaBeli1.setText(DataToko.plain(p.getHargaBeli()));
+        txtHargaJual1.setText(DataToko.plain(p.getHargaJual()));
+        txtStok1.setText(String.valueOf(p.getStok()));
+    }
+
+    private void bersihkan() {
+        tblProduk.clearSelection();
+        txtIdProduk1.setText(DataToko.idProdukBerikut());
+        txtNamaProduk1.setText("");
+        txtHargaBeli1.setText("");
+        txtHargaJual1.setText("");
+        txtStok1.setText("");
+        txtNamaProduk1.requestFocusInWindow();
+    }
+
+    private boolean hargaMasukAkal(BigDecimal beli, BigDecimal jual) {
+        if (jual.compareTo(beli) < 0) {
+            return DataToko.tanya(this, "Harga jual lebih kecil dari harga beli. Tetap lanjutkan?");
+        }
+        return true;
+    }
+
+    private void simpan() {
+        try {
+            String nama = Bantu.wajib(txtNamaProduk1.getText(), "Nama produk");
+            BigDecimal beli = Bantu.uang(txtHargaBeli1.getText(), "Harga beli");
+            BigDecimal jual = Bantu.uang(txtHargaJual1.getText(), "Harga jual");
+            int stok = Bantu.bulat(txtStok1.getText(), "Stok");
+            String id = txtIdProduk1.getText().trim();
+            if (id.isEmpty() || DataToko.cariProduk(id) != null) {
+                id = DataToko.idProdukBerikut();   // ID lama sudah dipakai, buat ID baru
+            }
+            if (!hargaMasukAkal(beli, jual)) {
+                return;
+            }
+            DataToko.tambahProduk(new Produk(id, nama, beli, jual, stok));
+            DataToko.pesan(this, "Produk " + id + " berhasil disimpan.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    private boolean bolehUbahStok() {
+        if (!DataToko.draftAktif.isEmpty()) {
+            DataToko.galat(this, "Masih ada pesanan atau pembelian yang belum disimpan.\n"
+                    + "Selesaikan atau batalkan dulu sebelum mengubah / menghapus produk.");
+            return false;
+        }
+        return true;
+    }
+
+    private void ubah() {
+        int baris = tblProduk.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            DataToko.galat(this, "Pilih produk di tabel yang mau diubah.");
+            return;
+        }
+        if (!bolehUbahStok()) {
+            return;
+        }
+        try {
+            Produk p = tampil.get(baris);
+            String nama = Bantu.wajib(txtNamaProduk1.getText(), "Nama produk");
+            BigDecimal beli = Bantu.uang(txtHargaBeli1.getText(), "Harga beli");
+            BigDecimal jual = Bantu.uang(txtHargaJual1.getText(), "Harga jual");
+            int stok = Bantu.bulat(txtStok1.getText(), "Stok");
+            if (!hargaMasukAkal(beli, jual)) {
+                return;
+            }
+            DataToko.ubahProduk(p, nama, beli, jual, stok);
+            DataToko.pesan(this, "Produk " + p.getIdProduk() + " berhasil diubah.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    private void hapus() {
+        int baris = tblProduk.getSelectedRow();
+        if (baris < 0 || baris >= tampil.size()) {
+            DataToko.galat(this, "Pilih produk di tabel yang mau dihapus.");
+            return;
+        }
+        if (!bolehUbahStok()) {
+            return;
+        }
+        Produk p = tampil.get(baris);
+        if (!DataToko.tanya(this, "Hapus produk " + DataToko.labelProduk(p) + "?")) {
+            return;
+        }
+        try {
+            DataToko.hapusProduk(p);
+            DataToko.pesan(this, "Produk berhasil dihapus.");
+            tampilkanData();
+            bersihkan();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    // ---- handler bawaan Form Editor (menu samping ditangani oleh Navigasi) ----
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void btnBersih1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBersih1ActionPerformed
-        // TODO add your handling code here:
+        bersihkan();
     }//GEN-LAST:event_btnBersih1ActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
+        tampilkanData();
     }//GEN-LAST:event_btnCariActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBersih;
     private javax.swing.JButton btnBersih1;
     private javax.swing.JButton btnCari;
     private javax.swing.JButton btnDashboard;
-    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnHapus1;
     private javax.swing.JButton btnKeluar;
     private javax.swing.JButton btnPelanggan;
@@ -529,10 +710,8 @@ public class PanelProduk extends javax.swing.JPanel {
     private javax.swing.JButton btnPenjualan;
     private javax.swing.JButton btnProduk;
     private javax.swing.JButton btnRiwayat;
-    private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnSimpan1;
     private javax.swing.JButton btnSupplier;
-    private javax.swing.JButton btnUbah;
     private javax.swing.JButton btnUbah1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -541,21 +720,15 @@ public class PanelProduk extends javax.swing.JPanel {
     private javax.swing.JLabel lblJudul1;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblTagline;
-    private javax.swing.JPanel pnlForm;
     private javax.swing.JPanel pnlForm1;
     private javax.swing.JPanel pnlGaris;
     private javax.swing.JPanel pnlSidebar;
     private javax.swing.JTable tblProduk;
     private javax.swing.JTextField txtCari;
-    private javax.swing.JTextField txtHargaBeli;
     private javax.swing.JTextField txtHargaBeli1;
-    private javax.swing.JTextField txtHargaJual;
     private javax.swing.JTextField txtHargaJual1;
-    private javax.swing.JTextField txtIdProduk;
     private javax.swing.JTextField txtIdProduk1;
-    private javax.swing.JTextField txtNamaProduk;
     private javax.swing.JTextField txtNamaProduk1;
-    private javax.swing.JTextField txtStok;
     private javax.swing.JTextField txtStok1;
     // End of variables declaration//GEN-END:variables
 }

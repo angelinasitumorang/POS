@@ -4,6 +4,22 @@
  */
 package com.unri.pbo.pos.gui;
 
+import com.unri.pbo.DetailPembelian;
+import com.unri.pbo.DetailPenjualan;
+import com.unri.pbo.Pelanggan;
+import com.unri.pbo.Pembelian;
+import com.unri.pbo.Penjualan;
+import com.unri.pbo.Produk;
+import com.unri.pbo.Supplier;
+import com.unri.pbo.pos.DataToko;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author angel
@@ -15,6 +31,7 @@ public class PanelPenjualan extends javax.swing.JPanel {
      */
     public PanelPenjualan() {
         initComponents();
+        siapkan();
     }
 
     /**
@@ -469,20 +486,139 @@ public class PanelPenjualan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    // =====================================================================
+    //  LOGIKA HALAMAN PENJUALAN (daftar penjualan yang sudah disimpan)
+    // =====================================================================
+    private DefaultTableModel modelJual;
+    private DefaultTableModel modelDetail;
+    private final List<DataToko.RekamPenjualan> tampil = new ArrayList<>();
+
+    private void siapkan() {
+        Navigasi.pasang("penjualan", btnDashboard, btnProduk, btnPelanggan, btnSupplier, btnPembelian,
+                btnPenjualan, btnRiwayat, btnKeluar);
+
+        modelJual = DataToko.buatModel("No", "ID Penjualan", "Tanggal", "Pelanggan", "Total", "Status");
+        tblPenjualan.setModel(modelJual);
+        tblPenjualan.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Bantu.lebarKolom(tblPenjualan, 40, 100, 100, 200, 110, 90);
+
+        modelDetail = DataToko.buatModel("No", "Produk", "Harga", "Jumlah", "Subtotal");
+        tblDetail.setModel(modelDetail);
+        Bantu.lebarKolom(tblDetail, 40, 220, 100, 70, 110);
+
+        cmbStatus.setModel(new DefaultComboBoxModel<>(new String[]{"Semua", "Selesai", "Dibatalkan"}));
+        cmbStatus.addActionListener(e -> tampilkanData());
+        txtCari.addActionListener(e -> tampilkanData());
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                tampilkanData();
+            }
+        });
+        tblPenjualan.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                tampilkanDetail();
+            }
+        });
+        btnPesanBaru.addActionListener(e -> MainFrame.instance.tampilHalaman("dashboard"));
+        btnCetakNote.addActionListener(e -> cetak());
+        btnBatalkan.addActionListener(e -> batalkan());
+        refresh();
+    }
+
+    /** Dipanggil MainFrame setiap halaman Penjualan dibuka. */
+    public void refresh() {
+        tampilkanData();
+    }
+
+    private void tampilkanData() {
+        String kata = txtCari.getText().trim().toLowerCase();
+        String status = String.valueOf(cmbStatus.getSelectedItem());
+        modelJual.setRowCount(0);
+        tampil.clear();
+        int no = 1;
+        // yang terbaru di paling atas
+        for (int i = DataToko.penjualan.size() - 1; i >= 0; i--) {
+            DataToko.RekamPenjualan r = DataToko.penjualan.get(i);
+            boolean cocokStatus = status.equals("Semua") || status.equalsIgnoreCase(r.status);
+            boolean cocokKata = kata.isEmpty() || r.id.toLowerCase().contains(kata)
+                    || r.pelanggan.getNama().toLowerCase().contains(kata)
+                    || r.pelanggan.getId().toLowerCase().contains(kata);
+            if (cocokStatus && cocokKata) {
+                tampil.add(r);
+                modelJual.addRow(new Object[]{no++, r.id, DataToko.tanggal(r.tanggal),
+                    r.pelanggan.getNama() + " (" + r.pelanggan.getId() + ")", DataToko.rp(r.total), r.status});
+            }
+        }
+        tampilkanDetail();
+    }
+
+    private DataToko.RekamPenjualan terpilih() {
+        int baris = tblPenjualan.getSelectedRow();
+        return (baris < 0 || baris >= tampil.size()) ? null : tampil.get(baris);
+    }
+
+    private void tampilkanDetail() {
+        modelDetail.setRowCount(0);
+        DataToko.RekamPenjualan r = terpilih();
+        if (r == null) {
+            lblTotalDetail.setText("Total: Rp 0");
+            return;
+        }
+        int no = 1;
+        for (DataToko.RekamDetail d : r.detail) {
+            modelDetail.addRow(new Object[]{no++, d.produk.getNamaProduk(), DataToko.angka(d.harga),
+                d.jumlah, DataToko.angka(d.subtotal)});
+        }
+        lblTotalDetail.setText("Total: " + DataToko.rp(r.total));
+    }
+
+    private void cetak() {
+        DataToko.RekamPenjualan r = terpilih();
+        if (r == null) {
+            DataToko.galat(this, "Pilih penjualan di tabel dulu.");
+            return;
+        }
+        DataToko.tampilTeks(this, "Nota " + r.id, DataToko.notaPenjualan(r));
+    }
+
+    private void batalkan() {
+        DataToko.RekamPenjualan r = terpilih();
+        if (r == null) {
+            DataToko.galat(this, "Pilih penjualan di tabel yang mau dibatalkan.");
+            return;
+        }
+        if (!"Selesai".equals(r.status)) {
+            DataToko.galat(this, "Penjualan " + r.id + " sudah berstatus " + r.status + ".");
+            return;
+        }
+        String alasan = Bantu.minta(this, "Batalkan Transaksi",
+                "Alasan membatalkan penjualan " + r.id + " (wajib diisi):");
+        if (alasan == null) {
+            DataToko.galat(this, "Pembatalan dibatalkan: alasan wajib diisi.");
+            return;
+        }
+        try {
+            DataToko.batalkanPenjualan(r, alasan);
+            DataToko.pesan(this, "Penjualan " + r.id + " dibatalkan dan stok sudah dikembalikan.");
+            tampilkanData();
+        } catch (RuntimeException ex) {
+            DataToko.galat(this, DataToko.pesanGalat(ex));
+        }
+    }
+
+    // ---- handler bawaan Form Editor ----
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPelangganActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPelangganActionPerformed
 
     private void btnPembelianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembelianActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnPembelianActionPerformed
 
     private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        // TODO add your handling code here:
+        tampilkanData();
     }//GEN-LAST:event_btnCariActionPerformed
 
 
